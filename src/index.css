@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1E2939;
+  --color-secondary: #ec4899;
+  --font-open-sans: 'Open Sans', sans-serif;
+}
+
+.bgImage {
+    background-image: url(../src/assets/mini-lyre-wash.png); 
+    background-repeat: no-repeat; background-size: cover;
+}
+
+#carousel {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.carousel-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+#carousel::-webkit-scrollbar {
+  width: 0px; 
+}
+
+
+
+
+

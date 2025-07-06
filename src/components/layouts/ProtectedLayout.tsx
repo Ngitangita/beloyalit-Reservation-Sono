@@ -1,0 +1,49 @@
+import type React from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuthStore } from "~/stores/useAuthStore";
+import type { Admin, Client } from "~/types/user";
+import Sidebar from "../adminDashboard/Sidebar";
+
+type AuthAdminProps = {
+  children?: (user: Admin | Client | null) => React.ReactNode;
+};
+
+function AuthAdmin({ children }: AuthAdminProps) {
+  const user = useAuthStore.use.user();
+  const isAuthenticated = useAuthStore.use.isAuthenticated();
+
+  if (isAuthenticated) {
+    return children?.(user) ?? null;
+  }
+  return <Navigate to="/sign-in" replace />;
+}
+
+const routes = {
+  "/admin": "Admin Dashboard",
+} as const;
+
+function ProtectedLayout() {
+  const location = useLocation();
+  const title = routes[location.pathname as keyof typeof routes] || "Dashboard";
+
+  return (
+    <AuthAdmin>
+      {(user) => (
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar/>
+          <div className="flex flex-col flex-1 overflow-y-auto">
+            <header className="bg-white shadow px-4 py-3 flex justify-between items-center">
+              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+              <div className="text-sm text-gray-500">{user?.email ?? "no-email@example.com"}</div>
+            </header>
+            <main className="flex-1 p-4 bg-gray-100">
+              <Outlet />
+            </main>
+          </div>
+        </div>
+      )}
+    </AuthAdmin>
+  );
+}
+
+export default ProtectedLayout;
