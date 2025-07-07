@@ -1,61 +1,25 @@
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-
-interface Product {
-  id: number;
-  name: string;
-  image_url: string;
-  quantity: number;
-  price: number;
-}
+import { useCartStore } from "~/stores/useCartStore";
 
 export default function Basket() {
-  const [cartItems, setCartItems] = useState<Product[]>([
-    {
-      id: 1,
-      name: "Focusrite Scarlett 2i2 3rd Gen",
-      image_url: "/pack-evenementiel.jpeg",
-      quantity: 1,
-      price: 119,
-    },
-    {
-      id: 2,
-      name: "Behringer WING Rack",
-      image_url: "/pack-evenementiel.jpeg",
-      quantity: 1,
-      price: 1399,
-    },
-  ]);
-  const [isAuthenticated, ] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const items = useCartStore((s) => s.items);
+  const remove = useCartStore((s) => s.removeFromCart);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
 
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
   const [location, setLocation] = useState("");
   const [duration, setDuration] = useState<number | "">("");
   const [dayNight, setDayNight] = useState<"jour" | "nuit">("jour");
-  const [paymentType, setPaymentType] = useState<"complet" | "partiel">(
-    "complet"
-  );
+  const [paymentType, setPaymentType] = useState<"complet" | "partiel">("complet");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const removeItem = (id: number) =>
-    setCartItems((prev) => prev.filter((i) => i.id !== id));
-  const updateQuantity = (id: number, delta: number) =>
-    setCartItems((prev) =>
-      prev
-        .map((i) => (i.id === id ? { ...i, quantity: i.quantity + delta } : i))
-        .filter((i) => i.quantity > 0)
-    );
-
-  const total = cartItems
-    .reduce((acc, i) => acc + i.price * i.quantity, 0)
-    .toFixed(2);
+  const [isAuthenticated] = useState(false);
 
   const validate = () => {
-    const errs: Record<string, string> = {};
+    const errs: Record<string,string> = {};
     if (!eventDate) errs.eventDate = "Veuillez choisir une date.";
     if (!eventTime) errs.eventTime = "Veuillez sélectionner une heure.";
     if (!location.trim()) errs.location = "Veuillez indiquer un lieu.";
@@ -63,54 +27,34 @@ export default function Basket() {
     return errs;
   };
 
-  const handleClick = (action: "sign-in" | "sign-up") => {
-    console.log("Action:", action);
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1000);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (cartItems.length === 0) return;
-
+    if (items.length === 0) return;
     if (!isAuthenticated) {
-      alert(
-        "Veuillez vous connecter ou créer un compte avant d'envoyer la demande."
-      );
+      alert("Veuillez vous connecter ou créer un compte avant d'envoyer la demande.");
       return;
     }
-
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
-
     setErrors({});
     setIsSubmitting(true);
-
-    const payload = {
-      cartItems,
-      eventDate,
-      eventTime,
-      location,
-      duration,
-      dayNight,
-      paymentType,
-      total,
-    };
-    console.log("Payload envoyé:", payload);
+    const payload = { items, eventDate, eventTime, location, duration, dayNight, paymentType };
+    console.log("Payload:", payload);
     setTimeout(() => {
       setIsSubmitting(false);
       alert("Demande envoyée !");
     }, 1000);
   };
 
+  const total = items.reduce((acc, i) => acc + i.price * i.quantity, 0).toFixed(2);
+
   return (
     <div className="max-w-4xl mx-auto p-6 flex flex-col gap-8">
       <h1 className="text-4xl font-bold text-[#18769C]">Votre panier</h1>
-
-      {cartItems.length === 0 ? (
+      {items.length === 0 ? (
         <>
           <div className="bg-white border border-[#18769C] rounded-lg p-8 text-center">
             <p>Votre panier est vide.</p>
@@ -151,14 +95,9 @@ export default function Basket() {
                 <Link to={link}>
                   <button
                     onClick={() => handleClick(action)}
-                    disabled={isLoading}
                     className="w-64 p-3 rounded bg-gradient-to-r from-[#18769C]/20 to-[#18769C] text-white hover:from-[#18769C] hover:to-[#18769C]/20 transition"
                   >
-                    {isLoading ? (
-                      <span className="animate-pulse">Chargement...</span>
-                    ) : (
-                      buttonText
-                    )}
+                      {buttonText}
                   </button>
                 </Link>
               </div>
@@ -166,11 +105,8 @@ export default function Basket() {
           </div>
         </>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-lg p-6 flex flex-col gap-6"
-        >
-          <div className="flex flex-row gap-4 flex-wrap items-center">
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 flex flex-col gap-6">
+            <div className="flex flex-row gap-4 flex-wrap items-center">
             <div>
               <label>Date de l'événement</label>
               <input
@@ -271,75 +207,29 @@ export default function Basket() {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex justify-between items-center py-4 border-b border-[#18769C]/50"
-              >
+            {items.map(item => (
+              <div key={item.id} className="flex justify-between items-center py-4 border-b border-[#18769C]/50">
                 <div className="flex items-center space-x-4">
-                  <img
-                    src={item.image_url}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover rounded"
-                  />
+                  <img src={item.image_url} alt={item.name} className="w-16 h-16 object-cover rounded" />
                   <div>
                     <p className="font-semibold">{item.name}</p>
                     <p className="text-gray-600">Prix : {item.price} Ar</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  {item.quantity > 1 ? (
-                    <button
-                      type="button"
-                      onClick={() => updateQuantity(item.id, -1)}
-                      className="px-2 py-1 bg-gray-200 rounded"
-                    >
-                      –
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(item.id)}
-                      className="p-1 text-red-600 hover:text-red-800 cursor-pointer"
-                    >
-                      <MdDelete size={20} />
-                    </button>
-                  )}
+                  <button type="button" onClick={() => updateQuantity(item.id, -1)} className="px-2 py-1 bg-gray-200 rounded">–</button>
                   <span>{item.quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => updateQuantity(item.id, +1)}
-                    className="px-2 py-1 bg-gray-200 rounded cursor-pointer"
-                  >
-                    +
-                  </button>
+                  <button type="button" onClick={() => updateQuantity(item.id, +1)} className="px-2 py-1 bg-gray-200 rounded">+</button>
                 </div>
-                 <span>{(item.price * item.quantity).toFixed(2)} Ar</span>
-                {item.quantity > 1 ? (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(item.id)}
-                      className="p-1 text-red-600 hover:text-red-800 cursor-pointer"
-                    >
-                      <MdDelete size={20} />
-                    </button>
-                  ) : (
-                    <div></div>
-                  )}
+                <span>{(item.price * item.quantity).toFixed(2)} Ar</span>
+                <button type="button" onClick={() => remove(item.id)} className="p-1 text-red-600 hover:text-red-800">
+                  <MdDelete size={20} />
+                </button>
               </div>
             ))}
-            <div className="text-right font-bold text-xl">
-              Total : {total} Ar
-            </div>
+            <div className="text-right font-bold text-xl">Total : {total} Ar</div>
           </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 mt-4 cursor-pointer
-              bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white"
-          >
+          <button type="submit" disabled={isSubmitting} className="p-2 rounded hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white">
             {isSubmitting ? "Envoi…" : "Envoyer la demande"}
           </button>
         </form>
