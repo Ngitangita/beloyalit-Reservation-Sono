@@ -148,8 +148,8 @@ export const SignUp = () => {
                         type={type}
                         placeholder={label}
                         disabled={pending}
-                        className={`w-[400px] sm:w-[550px] p-2 pr-10 border rounded outline-[#1E2939] ${
-                          error ? "border-red-500" : "border-[#575756]/50"
+                        className={`w-[400px] sm:w-[550px] p-2 pr-10 border rounded outline-[#18769C] ${
+                          error ? "border-red-500" : "border-[#18769C]/50"
                         }`}
                       />
                       {(isPassword || isConfirm) && (
@@ -183,8 +183,8 @@ export const SignUp = () => {
               type="submit"
               disabled={isSubmitting || pending}
               className="w-[400px] sm:w-[400px] p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#41C203] hover:to-[#41C203]/20 mt-4 cursor-pointer
-              bg-gradient-to-r from-[#41C203] to-[#41C203]/20 text-xl text-white"
+             hover:bg-gradient-to-l hover:from-[#18769C] hover:to-#18769C]/20 mt-4 cursor-pointer
+              bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white"
             >
               {pending ? (
                 <span className="animate-pulse">Chargement...</span>

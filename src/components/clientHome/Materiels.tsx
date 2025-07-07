@@ -6,73 +6,73 @@ const materiels: (MaterielsType & { path: string })[] = [
     id: 1,
     nom: "Sonorisation",
     image_url: "/sonorisation.jpg",
-    path: "/materiels/sonorisation",
+    path: "/catalogue",
   },
   {
     id: 2,
     nom: "Deejay",
     image_url: "/deejay.jpg",
-    path: "/materiels/deejay",
+    path: "/catalogue",
   },
   {
     id: 3,
     nom: "Home studio",
     image_url: "/home-studio.jpeg",
-    path: "/materiels/home-studio",
+    path: "/catalogue",
   },
   {
     id: 4,
     nom: "Instruments de musique",
     image_url: "/instruments-des-musiques.jpeg",
-    path: "/materiels/instruments-de-musique",
+    path: "/catalogue",
   },
   {
     id: 5,
     nom: "HiFi & vidéo",
     image_url: "/hifi-video.jpeg",
-    path: "/materiels/hifi-video",
+    path: "/catalogue",
   },
   {
     id: 6,
     nom: "Structure",
     image_url: "/structure.jpeg",
-    path: "/materiels/structure",
+    path: "/catalogue",
   },
   {
     id: 7,
     nom: "Flight case",
     image_url: "/flight-case.jpeg",
-    path: "/materiels/flight-case",
+    path: "/catalogue",
   },
   {
     id: 8,
     nom: "Microphones",
     image_url: "/microphones.jpeg",
-    path: "/materiels/microphones",
+    path: "/catalogue",
   },
   {
     id: 9,
     nom: "Enceintes",
     image_url: "/enceinte.jpeg",
-    path: "/materiels/enceintes",
+    path: "/catalogue",
   },
   {
     id: 10,
     nom: "Consoles de mixage",
     image_url: "/console-de-mixage.jpeg",
-    path: "/materiels/consoles-de-mixage",
+    path: "/catalogue",
   },
   {
     id: 11,
     nom: "Accessoires divers",
     image_url: "/accessoire-divers.jpeg",
-    path: "/materiels/accessoires-divers",
+    path: "/catalogue",
   },
   {
     id: 12,
     nom: "Packs événementiels",
     image_url: "/pack-evenementiel.jpeg",
-    path: "/materiels/packs-evenementiels",
+    path: "/catalogue",
   },
 ];
 
@@ -87,7 +87,7 @@ function Materiels() {
               alt={materiel.nom}
               className="w-40 h-24 object-cover rounded"
             />
-            <h3 className="mt-2 font-semibold text-lg text-gray-800 transition-colors duration-300 group-hover:text-[#00B5BD]">
+            <h3 className="mt-2 font-semibold text-lg text-gray-800 transition-colors duration-300 group-hover:text-[#18769C]">
               {materiel.nom}
             </h3>
           </div>

@@ -85,8 +85,8 @@ export const SignIn = () => {
               type="submit"
               disabled={isSubmitting || pending}
               className="w-[400px] sm:w-[500px] p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#41C203]/20 hover:to-[#41C203] mt-4 cursor-pointer
-              bg-gradient-to-r from-[#41C203]/20 to-[#41C203] text-xl text-white"
+             hover:bg-gradient-to-l hover:from-[#18769C]/20 hover:to-[#18769C] mt-4 cursor-pointer
+              bg-gradient-to-r from-[#18769C]/20 to-[#18769C] text-xl text-white"
             >
               {pending ? (
                 <span className="animate-pulse">Chargement...</span>
@@ -117,10 +117,10 @@ export const SignIn = () => {
                   {...register(name as keyof LoginValues)}
                   type={name === "password" ? "password" : "email"}
                   placeholder={name === "email" ? "Email" : "Mot de passe"}
-                  className={`p-2 pr-10 w-[400px] sm:w-[500px] border rounded outline-[#1E2939] ${
+                  className={`p-2 pr-10 w-[400px] sm:w-[500px] border rounded outline-[#18769C] ${
                     errors[name as keyof LoginValues]
                       ? "border-red-500"
-                      : "border-[#575756]/50"
+                      : "border-[#18769C]/50"
                   }`}
                 />
                 {errors[name as keyof LoginValues] && (
@@ -134,8 +134,8 @@ export const SignIn = () => {
               type="submit"
               disabled={isSubmitting || pending}
               className="w-[400px] sm:w-[500px] p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#41C203] hover:to-[#41C203]/20 mt-4 cursor-pointer
-              bg-gradient-to-r from-[#41C203] to-[#41C203]/20 text-xl text-white"
+             hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 mt-4 cursor-pointer
+              bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white"
             >
               {pending ? (
                 <span className="animate-pulse">Chargement...</span>

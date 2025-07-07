@@ -7,11 +7,6 @@
   --font-open-sans: 'Open Sans', sans-serif;
 }
 
-.bgImage {
-    background-image: url(../src/assets/mini-lyre-wash.png); 
-    background-repeat: no-repeat; background-size: cover;
-}
-
 #carousel {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -24,6 +19,7 @@
 #carousel::-webkit-scrollbar {
   width: 0px; 
 }
+
 
 
 

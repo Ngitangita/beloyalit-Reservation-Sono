@@ -78,8 +78,8 @@ export default function MenuSlider({ menuCategorie, location }: Props) {
       <button
         onClick={() => scroll("prev")}
         disabled={atStart}
-        className={`absolute left-[1px] top-7 text-3xl transform -translate-y-1/2 btn btn-circle btn-sm text-gray-500 
-          hover:bg-gray-300 p-2  cursor-pointer${
+        className={`absolute left-[1px] top-7 text-3xl transform -translate-y-1/2 btn btn-circle btn-sm text-[#18769C]/50
+           p-2  cursor-pointer hover:bg-[#1E2939] hover:text-[#18769C] ${
             atStart ? "opacity-50 cursor-not-allowed" : ""
           }`}
       >
@@ -89,8 +89,8 @@ export default function MenuSlider({ menuCategorie, location }: Props) {
       <button
         onClick={() => scroll("next")}
         disabled={atEnd}
-        className={`absolute right-[1px] top-7 transform -translate-y-1/2 btn btn-circle btn-sm text-gray-500 
-          hover:bg-gray-300 cursor-pointer text-3xl p-2 ${
+        className={`absolute right-[1px] top-7 transform -translate-y-1/2 btn btn-circle btn-sm text-[#18769C]/50
+          hover:bg-[#1E2939] hover:text-[#18769C] cursor-pointer text-3xl p-2 ${
             atEnd ? "opacity-50 cursor-not-allowed" : ""
           }`}
       >
