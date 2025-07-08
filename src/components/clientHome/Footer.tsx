@@ -1,18 +1,35 @@
 import { Link } from "react-router-dom";
-import {
-  FaFacebookF,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
 const Footer: React.FC = () => (
-  <footer className="bg-[#1E2939] text-white py-8 -z-50">
-    <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-      
+  <footer className="bg-[#1E2939] text-white py-8">
+    <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Blit Sono</h3>
+        <p className="text-sm mb-4">
+          Votre partenaire pour la sonorisation, l'éclairage et les équipements
+          audio professionnels à Madagascar.
+        </p>
+        <p className="text-sm">© 2025 Blit Sono. Tous droits réservés.</p>
+      </div>
+
       <div>
         <h3 className="text-lg font-semibold mb-4">Vos questions</h3>
         <ul className="space-y-2 text-sm">
-          {["Questions les + fréquentes", "Gamme et Stock", "Paiements", "Expédition & Livraison"].map((item, i) => (
-            <li key={i}><a href="#" className="hover:text-[#18769C]">{item}</a></li>
+          {[
+            "Questions les + fréquentes",
+            "Gamme et Stock",
+            "Paiements",
+            "Expédition & Livraison",
+          ].map((item, i) => (
+            <li key={i}>
+              <a
+                href="#"
+                className="block transition-colors duration-200 hover:text-[#18769C] focus:text-[#18769C]"
+              >
+                {item}
+              </a>
+            </li>
           ))}
         </ul>
       </div>
@@ -20,36 +37,71 @@ const Footer: React.FC = () => (
       <div>
         <h3 className="text-lg font-semibold mb-4">Produits</h3>
         <ul className="space-y-2 text-sm">
-          {["Accueil", "Sonorisation", "Deejay", "Éclairage", "Home studio", "Instruments de musique", "HiFi & vidéo", "Câblerie", "Structure", "Flight case"].map((item, i) => (
-            <li key={i}><a href="#" className="hover:text-[#18769C]">{item}</a></li>
+          {[
+            { label: "Accueil", to: "/" },
+            { label: "Sonorisation", to: "/catalogues" },
+            { label: "Deejay", to: "/catalogues" },
+            { label: "Éclairage", to: "/catalogues" },
+            { label: "Home studio", to: "/catalogues" },
+            { label: "Instruments de musique", to: "/catalogues" },
+            { label: "HiFi & vidéo", to: "/catalogues" },
+            { label: "Câblerie", to: "/catalogues" },
+            { label: "Structure", to: "/catalogues" },
+            { label: "Flight case", to: "/catalogues" },
+          ].map((item, i) => (
+            <li key={i}>
+              <Link
+                to={item.to}
+                className="block transition-colors duration-200 hover:text-[#18769C] focus:text-[#18769C]"
+              >
+                {item.label}
+              </Link>
+            </li>
           ))}
         </ul>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Besoin d'aide ?</h3>
-        <p className="text-xl font-bold mb-2">+261(0) 38 97 165 55</p>
-        <p className="text-sm mb-2">7j/7 de 24h/24</p>
-        <a href="#" className="inline-block mt-2 px-4 py-2 bg-[#18769C]/70 text-black font-medium rounded hover:bg-[#18769C]">
-          Contactez nous
+        <p className="text-xl font-bold mb-1">+261 (0)38 97 165 55</p>
+        <p className="text-sm mb-4">7j/7 & 24h/24</p>
+        <a
+          href="#"
+          className="inline-block px-4 py-2 bg-[#18769C] hover:bg-[#0f5a70] text-white font-medium rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
+        >
+          Contactez-nous
         </a>
       </div>
 
       <div>
         <h3 className="text-lg font-semibold mb-4">Suivez-nous</h3>
         <div className="flex space-x-4 mb-4">
-          {[FaFacebookF, FaInstagram].map((Icon, idx) => (
-            <a key={idx} href="#" className="p-3 bg-[#18769C]/70 rounded-full hover:bg-[#18769C] hover:text-black transition">
-              <Icon className="w-5 h-5" />
-            </a>
-          ))}
+          <a
+            href="https://www.facebook.com/blit.sono"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-3 bg-[#18769C] hover:bg-[#0f5a70] text-white rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
+          >
+            <FaFacebookF className="w-5 h-5" />
+          </a>
+          <a
+            href="https://www.instagram.com/blit.sono"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-3 bg-[#18769C] hover:bg-[#0f5a70] text-white rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
+          >
+            <FaInstagram className="w-5 h-5" />
+          </a>
         </div>
+
         <h3 className="text-lg font-semibold mb-2">Alerte bons plans !</h3>
-        <Link to="/sign-up" className="inline-block mt-2 px-4 py-2 bg-[#18769C]/70 text-black font-medium rounded hover:bg-[#18769C]">
+        <Link
+          to="/sign-up"
+          className="inline-block px-4 py-2 bg-[#18769C] hover:bg-[#0f5a70] text-white font-medium rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
+        >
           Je m'inscris
         </Link>
       </div>
-      
     </div>
   </footer>
 );

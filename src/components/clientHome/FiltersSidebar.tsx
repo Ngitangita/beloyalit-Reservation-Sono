@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const priceRanges = [
-  { label: "< 5000 Ar", min: 0,   max: 50 },
+  { label: "< 5000 Ar", min: 0, max: 50 },
   { label: "5000 Ar – 15 000 Ar", min: 50, max: 150 },
   { label: "15 000 Ar – 45 000 Ar", min: 150, max: 450 },
   { label: "45 000 Ar – 135 000 Ar", min: 450, max: 1350 },
@@ -31,13 +31,7 @@ type Props = {
   resetAll: () => void;
 };
 
-export default function FiltersSidebar({
-  selectedCats,
-  onCatsChange,
-  selectedPrices,
-  onPricesChange,
-  resetAll,
-}: Props) {
+export default function FiltersSidebar({ selectedCats, onCatsChange, selectedPrices, onPricesChange, resetAll }: Props) {
   const [showAllCats, setShowAllCats] = useState(false);
   const [showAllPrices, setShowAllPrices] = useState(false);
 
@@ -51,13 +45,9 @@ export default function FiltersSidebar({
   return (
     <aside className="w-64 p-4 bg-white rounded-lg">
       <h2 className="font-bold text-lg mb-4">Filtres</h2>
-      <button
-        onClick={resetAll}
-        className="w-full py-2 mb-4 bg-gray-100 rounded hover:bg-gray-200"
-      >
+      <button onClick={resetAll} className="w-full py-2 mb-4 bg-gray-100 rounded hover:bg-gray-200">
         Effacer les filtres
       </button>
-
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Catégorie</h3>
         {catsToShow.map(name => (
@@ -66,7 +56,7 @@ export default function FiltersSidebar({
               type="checkbox"
               className="mr-2"
               checked={selectedCats.includes(name)}
-              onChange={() => toggle<string>(selectedCats, name, onCatsChange)}
+              onChange={() => toggle(selectedCats, name, onCatsChange)}
             />
             {name}
           </label>
@@ -74,13 +64,12 @@ export default function FiltersSidebar({
         {categories.length > 7 && (
           <button
             className="text-[#00B5BD] text-sm mt-1 cursor-pointer"
-            onClick={() => setShowAllCats(prev => !prev)}
+            onClick={() => setShowAllCats(v => !v)}
           >
             {showAllCats ? "Voir moins ▲" : "Voir plus ▼"}
           </button>
         )}
       </div>
-
       <div>
         <h3 className="font-semibold mb-2">Prix</h3>
         {pricesToShow.map(pr => (
@@ -89,7 +78,7 @@ export default function FiltersSidebar({
               type="checkbox"
               className="mr-2"
               checked={selectedPrices.includes(pr)}
-              onChange={() => toggle<typeof pr>(selectedPrices, pr, onPricesChange)}
+              onChange={() => toggle(selectedPrices, pr, onPricesChange)}
             />
             {pr.label}
           </label>
@@ -97,7 +86,7 @@ export default function FiltersSidebar({
         {priceRanges.length > 3 && (
           <button
             className="text-[#00B5BD] text-sm mt-1 cursor-pointer"
-            onClick={() => setShowAllPrices(prev => !prev)}
+            onClick={() => setShowAllPrices(v => !v)}
           >
             {showAllPrices ? "Voir moins ▲" : "Voir plus ▼"}
           </button>

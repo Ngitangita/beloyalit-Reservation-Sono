@@ -8,6 +8,7 @@ import { SignIn } from "~/pages/auth/SignIn";
 import { SignUp } from "~/pages/auth/SignUp";
 import DashboardPage from "~/pages/admin/DashboardPage";
 import Catalogues from "~/pages/admin/Catalogues";
+import MaterialDetail from "~/pages/client/MaterialDetail";
 import PublicNotFound from "~/pages/not-found/PublicNotFound";
 import ProtectedNotFound from "~/pages/not-found/ProtectedNotFound";
 
@@ -26,8 +27,9 @@ const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "catalogue", element: <Catalogue /> },
-        { path: "basket", element: <Basket /> },
+      { path: "catalogues", element: <Catalogue /> },
+      { path: "materiel/:id", element: <MaterialDetail /> },
+      { path: "basket", element: <Basket /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <SignUp /> },
       { path: "*", element: <PublicNotFound /> },

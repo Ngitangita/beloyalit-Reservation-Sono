@@ -222,7 +222,8 @@ export default function Basket() {
                   <button type="button" onClick={() => updateQuantity(item.id, +1)} className="px-2 py-1 bg-gray-200 rounded">+</button>
                 </div>
                 <span>{(item.price * item.quantity).toFixed(2)} Ar</span>
-                <button type="button" onClick={() => remove(item.id)} className="p-1 text-red-600 hover:text-red-800">
+                <button type="button" onClick={() => remove(item.id)} 
+                className="p-1 text-red-600 hover:text-red-800 cursor-pointer">
                   <MdDelete size={20} />
                 </button>
               </div>
