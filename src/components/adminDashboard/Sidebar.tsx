@@ -1,7 +1,6 @@
 // Sidebar.tsx
 import { useState, type JSX } from "react";
 import {
-  MdOutlineCalendarMonth,
   MdOutlineHome,
   MdOutlineLogin,
   MdMenu,
@@ -15,9 +14,8 @@ import type { MenuItem } from "~/types/types.js";
 const menuItems: MenuItem[] = [
   { title: "Accueil", icon: <MdOutlineHome />, path: "/admin", subItems: [] },
   {
-    title: "Calendrier",
-    icon: <MdOutlineCalendarMonth />,
-    path: "/admin/catalogue",
+    title: "Categories",
+    path: "/admin/categories",
     subItems: [],
   },
 ];
@@ -63,25 +61,21 @@ export default function Sidebar(): JSX.Element {
           lg:translate-x-0 lg:relative lg:block
         `}
         >
-          <div className="flex flex-col items-center gap-2">
-            <div>
-              <img
-                src="/logo-blit.png"
-                alt="Logo BlitSono"
-                className="w-24 h-24 object-cover rounded-full"
-              />
-            </div>
-            <div className="text-center font-bold text-3xl leading-none flex flex-col italic font-serif">
-              <span>
-                beloya
-                <span className="text-[#18769C] ">lit </span>
-              </span>
-              <span className="text-xl inline-flex items-center justify-end gap-1 text-[#18769C] ">
-                <span className="block w-5 h-1 bg-white"></span>
-                .com
-              </span>
-            </div>
+         <div className="flex flex-col items-center gap-2">
+          <img
+            src="/logo-blit.png"
+            alt="Logo BlitSono"
+            className="w-24 h-24 object-cover rounded-full"
+          />
+          <div className="text-center font-bold text-3xl leading-none flex flex-col italic font-serif">
+            <span className="inline-block animate-revealText">
+              beloya<span className="text-[#18769C]">lit </span>
+            </span>
+            <span className="text-xl inline-flex items-center justify-end gap-1 text-[#18769C]">
+              <span className="block w-5 h-1 bg-white"></span>.com
+            </span>
           </div>
+        </div>
 
           <ul className="space-y-2 flex-1 overflow-y-auto">
             {menuItems.map((item, i) => (

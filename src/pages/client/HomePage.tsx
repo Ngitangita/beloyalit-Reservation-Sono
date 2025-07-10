@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import type { JSX } from "react";
 import MaterielsCategories from "~/components/clientHome/MaterielsCategories";
 import Materiels from "~/components/clientHome/Materiels";
+import WelcomeBlitSono from "~/components/clientHome/WelcomeBlitSono";
 
 const materiels: (MaterielType & { path: string })[] = [
   {
@@ -120,6 +121,7 @@ const materiels: (MaterielType & { path: string })[] = [
 
   return (
     <div>
+      <WelcomeBlitSono/>
       <MaterielsCategories materiels={materiels} location={location} />
       <Materiels />
     </div>

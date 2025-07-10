@@ -3,9 +3,10 @@ import { useSearchParams, Link } from "react-router-dom";
 import FiltersSidebar, {
   priceRanges,
 } from "~/components/clientHome/FiltersSidebar";
+import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import type { MaterielsType } from "~/types/types";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaHeadphones, FaPhone } from "react-icons/fa";
 
 type Materiel = MaterielsType & { prix: number };
 
@@ -95,108 +96,137 @@ export default function Catalogue() {
   };
 
   return (
-    <div className="flex md:flex-row gap-6 p-4">
-      <FiltersSidebar
-        selectedCats={selectedCats}
-        onCatsChange={setSelectedCats}
-        selectedPrices={selectedPrices}
-        onPricesChange={setSelectedPrices}
-        resetAll={() => {
-          setSelectedCats([]);
-          setSelectedPrices([]);
-        }}
-      />
-      <div className="flex-1">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <button
-              onClick={() => setIsGrid(true)}
-              className={`px-3 py-1 rounded ${
-                isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
-              }`}
-            >
-              🟦 Carte
-            </button>
-            <button
-              onClick={() => setIsGrid(false)}
-              className={`px-3 py-1 ml-2 rounded ${
-                !isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
-              }`}
-            >
-              📋 Liste
-            </button>
-          </div>
-          {q && (
-            <div className="text-sm italic text-gray-600">
-              Résultats pour : <strong>"{q}"</strong>
-            </div>
-          )}
-        </div>
-
+    <div>
+      <section className="bgImageCatalogue">
         <div
-          className={`${
-            isGrid
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4"
-              : "grid xl:grid-cols-2 gap-6"
-          }`}
+          className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
+         text-white py-16 w-full flex flex-col pl-30"
         >
-          {filtered.length === 0 ? (
-            <p>Aucun résultat trouvé.</p>
-          ) : (
-            filtered.map((m) => (
-              <div
-                key={m.id}
-                className={`group transition duration-300 rounded p-3 relative ${
-                  isGrid
-                    ? "flex flex-col items-center hover:scale-105"
-                    : "flex items-center gap-4 hover:bg-gray-100"
+          <h1 className="text-3xl font-extrabold mb-4 flex gap-1 w-[800px]">
+            <FaHeadphones className="text-7xl text-[#18769C]" />
+            Découvrez le catalogue Blit Sono - chaque matériel compte pour la
+            réussite de votre événement.
+          </h1>
+          <p className="w-[500px] text-lg italic mb-6 text-start flex items-center border-l-4 border-[#18769C] pl-4">
+            Notre équipe vous accompagne avec bienveillance pour vous aider à
+            choisir le meilleur matériel.
+          </p>
+
+          <div className="space-x-4">
+            <ScrollDownButton />
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 bg-[#145e7a] text-white
+             px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
+            >
+              <FaPhone /> Nous contacter
+            </a>
+          </div>
+        </div>
+      </section>
+      <div className="flex md:flex-row gap-6 p-4">
+        <FiltersSidebar
+          selectedCats={selectedCats}
+          onCatsChange={setSelectedCats}
+          selectedPrices={selectedPrices}
+          onPricesChange={setSelectedPrices}
+          resetAll={() => {
+            setSelectedCats([]);
+            setSelectedPrices([]);
+          }}
+        />
+        <div className="flex-1">
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-[#575756]">
+              <button
+                onClick={() => setIsGrid(true)}
+                className={`px-3 py-1 rounded cursor-pointer ${
+                  isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
                 }`}
               >
-                <img
-                  src={m.image_url}
-                  alt={m.nom}
-                  className={`rounded object-cover ${
-                    isGrid ? "w-40 h-24" : "w-20 h-14"
-                  }`}
-                />
-                <h3
-                  className={`text-gray-800 font-semibold ${
-                    isGrid ? "mt-3 text-center" : ""
-                  } group-hover:text-[#18769C]`}
-                >
-                  {m.nom}
-                </h3>
-                <div
-                  className={`mt-2 flex items-center gap-1 ${
-                    isGrid
-                      ? "absolute left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
-                      : "ml-auto"
-                  }`}
-                >
-                  <Link
-                    to={`/materiel/${m.id}`}
-                    className="w-[90px] border border-[#18769C] text-[#18769C] bg-white p-1.5 rounded-l-full hover:bg-[#18769C] hover:text-white text-sm flex justify-center"
-                  >
-                    Voir détail
-                  </Link>
-                  <button
-                    onClick={() => toggleAdded(m.id, m)}
-                    className={`p-2 pr-3 rounded-r-full cursor-pointer ${
-                      addedIds.has(m.id)
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-[#18769C] hover:bg-[#0f5a70]"
-                    } text-white transition duration-200`}
-                  >
-                    {addedIds.has(m.id) ? (
-                      "✓"
-                    ) : (
-                      <FaShoppingCart className="text-lg" />
-                    )}
-                  </button>
-                </div>
+                🟦 Carte
+              </button>
+              <button
+                onClick={() => setIsGrid(false)}
+                className={`px-3 py-1 ml-2 rounded cursor-pointer ${
+                  !isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
+                }`}
+              >
+                📋 Liste
+              </button>
+            </div>
+            {q && (
+              <div className="text-sm italic text-gray-600">
+                Résultats pour : <strong>"{q}"</strong>
               </div>
-            ))
-          )}
+            )}
+          </div>
+
+          <div
+            className={`text-[#575756] ${
+              isGrid
+                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4"
+                : "grid xl:grid-cols-2 gap-6"
+            }`}
+          >
+            {filtered.length === 0 ? (
+              <p>Aucun résultat trouvé.</p>
+            ) : (
+              filtered.map((m) => (
+                <div
+                  key={m.id}
+                  className={`group transition duration-300 rounded p-3 relative ${
+                    isGrid
+                      ? "flex flex-col items-center hover:scale-105"
+                      : "flex items-center gap-4 hover:bg-gray-100"
+                  }`}
+                >
+                  <img
+                    src={m.image_url}
+                    alt={m.nom}
+                    className={`rounded object-cover ${
+                      isGrid ? "w-40 h-24" : "w-20 h-14"
+                    }`}
+                  />
+                  <h3
+                    className={`text-gray-800 font-semibold text-[#1E2939] ${
+                      isGrid ? "mt-3 text-center" : ""
+                    } group-hover:text-[#18769C]`}
+                  >
+                    {m.nom}
+                  </h3>
+                  <div
+                    className={`mt-2 flex items-center gap-1 ${
+                      isGrid
+                        ? "absolute left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        : "ml-auto"
+                    }`}
+                  >
+                    <Link
+                      to={`/materiel/${m.id}`}
+                      className="w-[90px] border border-[#18769C] text-[#18769C] bg-white p-1.5 rounded-l-full hover:bg-[#18769C] hover:text-white text-sm flex justify-center"
+                    >
+                      Voir détail
+                    </Link>
+                    <button
+                      onClick={() => toggleAdded(m.id, m)}
+                      className={`p-2 pr-3 rounded-r-full cursor-pointer ${
+                        addedIds.has(m.id)
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-[#18769C] hover:bg-[#0f5a70]"
+                      } text-white transition duration-200`}
+                    >
+                      {addedIds.has(m.id) ? (
+                        "✓"
+                      ) : (
+                        <FaShoppingCart className="text-lg" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

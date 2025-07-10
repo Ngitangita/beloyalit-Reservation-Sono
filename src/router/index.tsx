@@ -7,10 +7,12 @@ import Basket from "~/pages/client/Basket";
 import { SignIn } from "~/pages/auth/SignIn";
 import { SignUp } from "~/pages/auth/SignUp";
 import DashboardPage from "~/pages/admin/DashboardPage";
-import Catalogues from "~/pages/admin/Catalogues";
+import Category from "~/pages/admin/Category";
 import MaterialDetail from "~/pages/client/MaterialDetail";
 import PublicNotFound from "~/pages/not-found/PublicNotFound";
 import ProtectedNotFound from "~/pages/not-found/ProtectedNotFound";
+import ReservationPack from "~/pages/client/ReservationPack";
+import EspaceClient from "~/pages/client/Espace-client";
 
 const router = createBrowserRouter([
    {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     element: <ProtectedLayout />,
     children: [
       { index: true, element: <DashboardPage /> },
-      { path: "catalogue", element: <Catalogues /> },
+      { path: "categories", element: <Category /> },
       { path: "*", element: <ProtectedNotFound /> },
     ],
   },
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "catalogues", element: <Catalogue /> },
       { path: "materiel/:id", element: <MaterialDetail /> },
+      { path: "reservation-pack", element: <ReservationPack /> },
+      { path: "client", element: <EspaceClient />},
       { path: "basket", element: <Basket /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <SignUp /> },

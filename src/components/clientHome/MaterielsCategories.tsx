@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { MaterielType } from "~/types/types";
 import { useRef, useState, useEffect, useCallback } from "react";
 
-interface Props {
+type Props = {
   materiels: (MaterielType & { path: string })[];
   autoScrollIntervalMs?: number;
 }
@@ -59,7 +59,7 @@ export default function MaterielsCategories({
   }, [autoScrollIntervalMs, scroll, scrollBy]);
 
   return (
-    <div className="relative flex items-center border-b border-gray-300 pl-7 pr-6">
+    <div className="relative flex items-center border-b border-gray-300 pl-7 pr-6 pt-5">
       <div
         id="carousel"
         ref={carouselRef}
@@ -68,7 +68,7 @@ export default function MaterielsCategories({
         {materiels.map((m) => (
           <Link
             key={m.id}
-            to={`/catalogue?cat=${m.id}`}
+            to={`/catalogues?cat=${m.id}`}
             className="inline-block w-64 mx-2"
           >
             <div className="rounded-lg p-4 shadow-md hover:scale-110 transition duration-300 ease-in-out bg-white hover:shadow-lg group">
@@ -93,7 +93,7 @@ export default function MaterielsCategories({
       <button
         onClick={() => scroll("prev")}
         disabled={atStart}
-        className={`absolute left-1 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
+        className={`absolute cursor-pointer left-1 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
           atStart ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
@@ -102,7 +102,7 @@ export default function MaterielsCategories({
       <button
         onClick={() => scroll("next")}
         disabled={atEnd}
-        className={`absolute right-2 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
+        className={`absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
           atEnd ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >

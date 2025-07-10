@@ -11,13 +11,28 @@ html {
   scroll-behavior: smooth;
   font-size: 90.5%;
 }
-::-webkit-scrollbar {
-  width: 8px;
-}
-* {
-  scrollbar-width: thin;
+
+.bgImage{
+  background-image: url('/accueil.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
+.bgImageCatalogue {
+  background-image: url('/catalogue.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.bgImageReservation {
+  background-image: url('/calendar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 #carousel {
   scroll-snap-type: x mandatory;

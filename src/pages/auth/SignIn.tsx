@@ -74,10 +74,10 @@ export const SignIn = () => {
         <div className="flex flex-col items-center gap-12 relative bottom-5">
           <h2 className="text-center font-semibold font-open-sans text-[20px]">
             Nouveau client ?</h2>
-          <p className="text-start max-w-[500px]">
+          <p className="text-start max-w-[500px] text-[#18769C]">
             En créant votre compte sur beloyalit.com, vous gagnerez du temps
             lors de vos prochaines réservations de sonorisation, accéderez à
-            l’ensemble des services de votre espace personnel et profiterez de
+            l'ensemble des services de votre espace personnel et profiterez de
             nos diverses offres promotionnelles
           </p>
            <Link to="/sign-up">

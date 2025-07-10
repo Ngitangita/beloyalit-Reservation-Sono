@@ -6,13 +6,19 @@ import { useAuthStore } from "~/stores/useAuthStore";
 import { useCartStore } from "~/stores/useCartStore";
 import Search from "./Search";
 
-const menuItems = [
+type MenuItem = {
+  title: string;
+  path: string;
+}
+
+const menuItems: MenuItem[] = [
   { title: "Accueil", path: "/" },
-  { title: "Catalogue", path: "/catalogue" },
+  { title: "Catalogue", path: "/catalogues" },
+  { title: "Réservation de packs", path: "/reservation-pack" },
   { title: "Espace client", path: "/client" },
 ];
 
-export default function Header() {
+export default function Header(): JSX.Element {
   const isAuth = useAuthStore.use.isAuthenticated();
   const totalItems = useCartStore((s) => s.totalCount());
   const navigate = useNavigate();
@@ -29,7 +35,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 w-full bg-[#1E2939] text-white z-50">
       <div className="flex justify-between items-center p-4 pr-10">
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2 cursor-pointer">
           <img
             src="/logo-blit.png"
             alt="Logo BlitSono"

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 export const priceRanges = [
-  { label: "< 5000 Ar", min: 0, max: 50 },
-  { label: "5000 Ar – 15 000 Ar", min: 50, max: 150 },
-  { label: "15 000 Ar – 45 000 Ar", min: 150, max: 450 },
-  { label: "45 000 Ar – 135 000 Ar", min: 450, max: 1350 },
-  { label: "135 000 Ar – 405 000 Ar", min: 1350, max: 4050 },
+  { label: "< 5000 Ar", min: 0, max: 50 },
+  { label: "5000 Ar - 15 000 Ar", min: 50, max: 150 },
+  { label: "15 000 Ar - 45 000 Ar", min: 150, max: 450 },
+  { label: "45 000 Ar - 135 000 Ar", min: 450, max: 1350 },
+  { label: "135 000 Ar - 405 000 Ar", min: 1350, max: 4050 },
 ];
 
 const categories = [
@@ -43,7 +43,7 @@ export default function FiltersSidebar({ selectedCats, onCatsChange, selectedPri
   const pricesToShow = showAllPrices ? priceRanges : priceRanges.slice(0, 3);
 
   return (
-    <aside className="w-64 p-4 bg-white rounded-lg">
+    <aside className="w-64 p-4 bg-white text-[#575756] rounded-lg">
       <h2 className="font-bold text-lg mb-4">Filtres</h2>
       <button onClick={resetAll} className="w-full py-2 mb-4 bg-gray-100 rounded hover:bg-gray-200">
         Effacer les filtres
