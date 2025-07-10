@@ -6,7 +6,7 @@ import FiltersSidebar, {
 import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import type { MaterielsType } from "~/types/types";
-import { FaShoppingCart, FaHeadphones, FaPhone } from "react-icons/fa";
+import { FaShoppingCart, FaHeadphones, FaPhone, FaThumbsUp } from "react-icons/fa";
 
 type Materiel = MaterielsType & { prix: number };
 
@@ -189,7 +189,7 @@ export default function Catalogue() {
                     }`}
                   />
                   <h3
-                    className={`text-gray-800 font-semibold text-[#1E2939] ${
+                    className={`font-semibold text-[#1E2939] ${
                       isGrid ? "mt-3 text-center" : ""
                     } group-hover:text-[#18769C]`}
                   >
@@ -229,6 +229,18 @@ export default function Catalogue() {
           </div>
         </div>
       </div>
+      <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
+          <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[700px]">
+            <FaThumbsUp size={24} /> Merci d'avoir exploré le catalogue Blit Sono !
+          </h1>
+          <p className="w-[700px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4">
+             Chaque équipement a été
+        pensé pour sublimer vos événements. Notre équipe dévouée reste à vos
+        côtés pour vous guider, vous conseiller et vous assurer une expérience
+        100 % sereine. Réservez en toute confiance - chaque matériel compte pour
+        faire de votre projet un succès !
+          </p>
+        </div>
     </div>
   );
 }

@@ -125,9 +125,15 @@ export default function EspaceClient(): JSX.Element {
                   <td className="p-3">{r.date}</td>
                   <td className="p-3">{joinAndTruncate(r.materiel)}</td>
                   <td className="p-3">{r.lieu}</td>
-                  <td className="p-3 font-semibold flex items-center justify-center space-x-2">
+                   <td
+                    className={`p-3 font-semibold flex flex-row items-center ${
+                      r.statut === "Confirmée"
+                        ? "text-green-600"
+                        : "text-yellow-600"
+                    }`}
+                  >
                     {getReservationIcon(r.statut)}
-                    <span>{r.statut}</span>
+                    <span className="ml-2">{r.statut}</span>
                   </td>
                   <td className="p-3 space-x-2">
                     <Link

@@ -13,6 +13,8 @@ import PublicNotFound from "~/pages/not-found/PublicNotFound";
 import ProtectedNotFound from "~/pages/not-found/ProtectedNotFound";
 import ReservationPack from "~/pages/client/ReservationPack";
 import EspaceClient from "~/pages/client/Espace-client";
+import Devis from "~/pages/client/Devis";
+import Facture from "~/pages/client/Facture";
 
 const router = createBrowserRouter([
    {
@@ -33,6 +35,8 @@ const router = createBrowserRouter([
       { path: "materiel/:id", element: <MaterialDetail /> },
       { path: "reservation-pack", element: <ReservationPack /> },
       { path: "client", element: <EspaceClient />},
+      { path: "devis/:id", element: <Devis />},
+      { path: "facture/:id", element: <Facture />},
       { path: "basket", element: <Basket /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <SignUp /> },

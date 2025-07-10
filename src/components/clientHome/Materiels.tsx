@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import type { MaterielsType } from "~/types/types";
+import {
+  FaThumbsUp,
+} from "react-icons/fa";
 
 const materiels: (MaterielsType & { path: string })[] = [
   {
@@ -66,17 +69,33 @@ const materiels: (MaterielsType & { path: string })[] = [
 
 export default function Materiels() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 p-4">
-      {materiels.map((m, i) => (
-        <Link key={i}  to={`/materiel/${m.id}`}>
-          <div className="p-4 flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110 group">
-            <img src={m.image_url} alt={m.nom} className="w-40 h-24 object-cover rounded" />
-            <h3 className="mt-2 font-semibold text-lg text-gray-800 transition-colors duration-300 group-hover:text-[#18769C]">
-              {m.nom}
-            </h3>
-          </div>
-        </Link>
-      ))}
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 p-4">
+        {materiels.map((m, i) => (
+          <Link key={i} to={`/materiel/${m.id}`}>
+            <div className="p-4 flex flex-col items-center gap-3 transform transition duration-300 hover:scale-110 group">
+              <img
+                src={m.image_url}
+                alt={m.nom}
+                className="w-40 h-24 object-cover rounded"
+              />
+              <h3 className="mt-2 font-semibold text-lg text-gray-800 transition-colors duration-300 group-hover:text-[#18769C]">
+                {m.nom}
+              </h3>
+            </div>
+          </Link>
+        ))}
+      </div>
+      <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
+        <p className="w-[700px] text-lg italic text-start flex items-start border-l-4 border-[#18769C] pl-4 gap-2">
+         <FaThumbsUp size={90} className="relative bottom-10"/>  Blit Sono vous accompagne pour vos événements avec un service fiable
+          et attentionné, en proposant des équipements son et lumière
+          professionnels, un système de réservation simple et une équipe à
+          l'écoute. Faites confiance à notre savoir-faire et réservez dès
+          maintenant : transformez votre projet en une expérience sonore
+          inoubliable !
+        </p>
+      </div>
     </div>
   );
 }
