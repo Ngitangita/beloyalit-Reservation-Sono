@@ -75,14 +75,16 @@ const Footer: React.FC = () => {
         
         <div>
           <h3 className="text-lg font-semibold mb-4">Besoin d'aide ?</h3>
-          <p className="text-xl font-bold mb-1">+261 (0)38 97 165 55</p>
+          <p className="text-xl font-bold mb-1">+261 (0)34 71 026 04</p>
           <p>contact@beloyalit.com</p>
           <p className="text-sm mb-4">7j/7 & 24h/24</p>
           <a
-            href="#"
+            href="https://www.facebook.com/blit.sono"
+            target="_blank" 
+            rel="noopener noreferrer"
             className="inline-block px-4 py-2 bg-[#18769C] hover:bg-[#0f5a70] text-white font-medium rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
           >
-            Contactez-nous
+            Contactez-nous sur MP
           </a>
         </div>
 

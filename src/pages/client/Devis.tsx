@@ -20,6 +20,14 @@ const lignes: Ligne[] = [
     sousTotal: "360€",
     image_url: "/pack-evenementiel.jpeg",
   },
+   {
+    designation: "Deejay",
+    quantite: 2,
+    prixUnitaire: "180€/jour",
+    duree: "2 jours",
+    sousTotal: "360€",
+    image_url: "/deejay.jpg",
+  },
 ];
 
 export default function Devis(): JSX.Element {
@@ -27,6 +35,7 @@ export default function Devis(): JSX.Element {
 
   return (
     <div className="text-[#575756]">
+      <title>Vos devis personnalisés | Blit Sono</title>
       <section className="bgImageReservation">
         <div className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
                         text-white py-10 w-full flex flex-col pl-30">
@@ -45,10 +54,12 @@ export default function Devis(): JSX.Element {
               <FaHeadphones /> Explorer notre catalogue
             </Link>
             <Link
-              to="#"
+              to="https://www.facebook.com/blit.sono"
+              target="_blank" 
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#145e7a] text-white px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             >
-              <FaPhone /> Nous contacter
+              <FaPhone /> Contactez-nous sur MP
             </Link>
           </div>
         </div>
@@ -56,7 +67,7 @@ export default function Devis(): JSX.Element {
 
       <div className="p-6 max-w-4xl mx-auto bg-white rounded shadow mt-8">
         <h1 className="text-2xl font-bold mb-4">Votre Devis</h1>
-        <Link to="/client" className="text-[#18769C] hover:underline mb-6 block">
+        <Link to="/client" className="text-[#18769C] hover:underline mb-6 block text-2xl">
           ← Retour à mes réservations
         </Link>
 

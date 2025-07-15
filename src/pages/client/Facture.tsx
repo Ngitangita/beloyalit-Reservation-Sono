@@ -25,6 +25,14 @@ const lignesFacture: LigneFacture[] = [
     sousTotal: "360€",
     image_url: "/pack-evenementiel.jpeg",
   },
+   {
+    designation: "Pack DJ + Éclairage",
+    quantite: 2,
+    prixUnitaire: "180€/jour",
+    duree: "2 jours",
+    sousTotal: "360€",
+    image_url: "/pack-evenementiel.jpeg",
+  },
 ];
 
 export default function Facture(): JSX.Element {
@@ -32,6 +40,7 @@ export default function Facture(): JSX.Element {
 
   return (
     <div className="text-[#575756]">
+      <title>Détails de la facture | Blit Sono</title>
       <section className="bgImageReservation">
         <div
           className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
@@ -54,10 +63,12 @@ export default function Facture(): JSX.Element {
               <FaHeadphones /> Explorer notre catalogue
             </Link>
             <Link
-              to="#"
+              to="https://www.facebook.com/blit.sono"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#145e7a] text-white px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             >
-              <FaPhone /> Nous contacter
+              <FaPhone /> Contactez-nous sur MP
             </Link>
           </div>
         </div>
@@ -67,14 +78,13 @@ export default function Facture(): JSX.Element {
         <h1 className="text-2xl font-bold mb-4">Facture</h1>
         <Link
           to="/client"
-          className="text-[#18769C] hover:underline mb-6 block"
+          className="text-[#18769C] hover:underline mb-6 block text-2xl"
         >
           ← Retour à mes réservations
         </Link>
 
         <div className="flex justify-between mb-6">
           <div className="flex flex-col items-center">
-    
             <p>
               <strong>Facturé à :</strong>
             </p>
@@ -115,7 +125,8 @@ export default function Facture(): JSX.Element {
                     alt={L.designation}
                     className="w-12 h-12 object-cover rounded"
                   />
-                  <span>{L.designation}</span> </td>
+                  <span>{L.designation}</span>{" "}
+                </td>
                 <td className="p-2">{L.quantite}</td>
                 <td className="p-2">{L.prixUnitaire}</td>
                 <td className="p-2">{L.duree}</td>
@@ -141,17 +152,17 @@ export default function Facture(): JSX.Element {
           </div>
         </div>
       </div>
-        <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
-          <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[500px]">
-            <FaThumbsUp size={24} /> Merci d'avoir choisi BlitSono !
-          </h1>
-          <p className="w-[500px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4">
-            Nous sommes honorés de participer au succès de votre événement avec
-            du matériel professionnel, fiable et de grande qualité. Vous
-            bénéficiez d'une prestation experte, d'une installation maîtrisée et
-            de la sérénité d'un service complet. À très bientôt !
-          </p>
-        </div>
+      <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
+        <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[500px]">
+          <FaThumbsUp size={24} /> Merci d'avoir choisi BlitSono !
+        </h1>
+        <p className="w-[500px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4">
+          Nous sommes honorés de participer au succès de votre événement avec du
+          matériel professionnel, fiable et de grande qualité. Vous bénéficiez
+          d'une prestation experte, d'une installation maîtrisée et de la
+          sérénité d'un service complet. À très bientôt !
+        </p>
+      </div>
     </div>
   );
 }

@@ -27,6 +27,15 @@ html {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+.bgImagePack {
+  background-image: url('/packs.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .bgImageReservation {
   background-image: url('/calendar.jpg');
   background-size: cover;

@@ -67,6 +67,7 @@ export default function Basket() {
 
   return (
     <div className="p-6 flex flex-col gap-8">
+      <title>Panier - Finalisez votre réservation</title>
       <h1 className="text-4xl font-bold text-[#18769C]">Votre panier</h1>
       {items.length === 0 ? (
         <>

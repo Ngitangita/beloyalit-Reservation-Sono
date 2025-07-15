@@ -1,4 +1,4 @@
-// Sidebar.tsx
+
 import { useState, type JSX } from "react";
 import {
   MdOutlineHome,
@@ -13,6 +13,11 @@ import type { MenuItem } from "~/types/types.js";
 
 const menuItems: MenuItem[] = [
   { title: "Accueil", icon: <MdOutlineHome />, path: "/admin", subItems: [] },
+   {
+    title: "Catalogues",
+    path: "/admin/catalogues",
+    subItems: [],
+  },
   {
     title: "Categories",
     path: "/admin/categories",

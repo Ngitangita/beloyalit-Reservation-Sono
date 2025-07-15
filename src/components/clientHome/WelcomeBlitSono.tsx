@@ -28,12 +28,14 @@ const WelcomeBlitSono: React.FC = (): JSX.Element => {
             <FaHeadphones /> Explorer notre catalogue
           </a>
           <a
-            href="#contact"
+             href="https://www.facebook.com/blit.sono"
+            target="_blank" 
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#145e7a] text-white
              px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             role="button"
           >
-            <FaPhone /> Nous contacter
+            <FaPhone /> Nous contacter sur MP
           </a>
         </div>
       </div>

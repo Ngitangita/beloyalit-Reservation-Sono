@@ -1,3 +1,4 @@
+// Catalogue.tsx
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import FiltersSidebar, {
@@ -6,22 +7,44 @@ import FiltersSidebar, {
 import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import type { MaterielsType } from "~/types/types";
-import { FaShoppingCart, FaHeadphones, FaPhone, FaThumbsUp } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaHeadphones,
+  FaPhone,
+  FaThumbsUp,
+} from "react-icons/fa";
 
 type Materiel = MaterielsType & { prix: number };
 
 const allMateriels: Materiel[] = [
-  { id: 1, nom: "Sonorisation", image_url: "/sonorisation.jpg", prix: 100 },
-  { id: 2, nom: "Deejay", image_url: "/deejay.jpg", prix: 120 },
-  { id: 3, nom: "Home studio", image_url: "/home-studio.jpeg", prix: 80 },
+  { id: 1, nom: "Sonorisation", 
+    image_url: "/sonorisation.jpg", 
+    prix: 100, 
+    categorieId: { id: 1, nom: "Sonorisation" } },
+  { id: 2, 
+    nom: "Deejay", 
+    image_url: "/deejay.jpg", 
+    prix: 120, 
+    categorieId: { id: 2, nom: "Deejay" } },
+  { id: 3, 
+    nom: "Home studio", 
+    image_url: "/home-studio.jpeg", 
+    prix: 80, 
+    categorieId: { id: 3, nom: "Home studio" } },
+  
   {
     id: 4,
     nom: "Instruments de musique",
     image_url: "/instruments-des-musiques.jpeg",
     prix: 150,
+     categorieId: { id: 3, nom: "Home studio" }
   },
-  { id: 5, nom: "HiFi & vidéo", image_url: "/hifi-video.jpeg", prix: 90 },
-  { id: 6, nom: "Structure", image_url: "/structure.jpeg", prix: 200 },
+  { id: 5, nom: "HiFi & vidéo", image_url: "/hifi-video.jpeg", prix: 90 ,
+     categorieId: { id: 3, nom: "Home studio" }
+  },
+  { id: 6, nom: "Structure", image_url: "/structure.jpeg", prix: 200,
+     categorieId: { id: 3, nom: "Structure" }
+   },
   { id: 7, nom: "Flight case", image_url: "/flight-case.jpeg", prix: 110 },
   { id: 8, nom: "Microphones", image_url: "/microphones.jpeg", prix: 70 },
   { id: 9, nom: "Enceintes", image_url: "/enceinte.jpeg", prix: 130 },
@@ -54,27 +77,44 @@ export default function Catalogue() {
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
   const [initializedCat, setInitializedCat] = useState(false);
   const [filtered, setFiltered] = useState<Materiel[]>(allMateriels);
+
   const addToCart = useCartStore((s) => s.addToCart);
   const [addedIds, setAddedIds] = useState<Set<number>>(new Set());
+  
+  const categories = Array.from(
+    new Set(allMateriels.map((m) => m.categorieId?.nom).filter(Boolean as any))
+  );
 
   useEffect(() => {
     if (!initializedCat && cat) {
-      const found = allMateriels.find((m) => m.nom === cat);
-      if (found) setSelectedCats([found.nom]);
+      const found = allMateriels.find((m) => m.categorieId?.nom === cat);
+      if (found && found.categorieId) {
+        setSelectedCats([found.categorieId.nom]);
+      }
       setInitializedCat(true);
     }
   }, [cat, initializedCat]);
 
   useEffect(() => {
     let res = allMateriels;
-    if (q) res = res.filter((item) => item.nom.toLowerCase().includes(q));
-    if (selectedCats.length > 0)
-      res = res.filter((item) => selectedCats.includes(item.nom));
+
+    if (q) {
+      res = res.filter((item) => item.nom.toLowerCase().includes(q));
+    }
+
+    if (selectedCats.length > 0) {
+      res = res.filter(
+        (item) =>
+          item.categorieId && selectedCats.includes(item.categorieId.nom)
+      );
+    }
+
     if (selectedPrices.length > 0) {
       res = res.filter((item) =>
         selectedPrices.some((pr) => item.prix >= pr.min && item.prix < pr.max)
       );
     }
+
     setFiltered(res);
   }, [q, selectedCats, selectedPrices]);
 
@@ -97,11 +137,9 @@ export default function Catalogue() {
 
   return (
     <div>
+      <title>Catalogue | Blit Sono - Matériel Son & Lumière</title>
       <section className="bgImageCatalogue">
-        <div
-          className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
-         text-white py-16 w-full flex flex-col pl-30"
-        >
+        <div className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939] text-white py-16 w-full flex flex-col pl-30">
           <h1 className="text-3xl font-extrabold mb-4 flex gap-1 w-[800px]">
             <FaHeadphones className="text-7xl text-[#18769C]" />
             Découvrez le catalogue Blit Sono - chaque matériel compte pour la
@@ -111,25 +149,30 @@ export default function Catalogue() {
             Notre équipe vous accompagne avec bienveillance pour vous aider à
             choisir le meilleur matériel.
           </p>
-
           <div className="space-x-4">
             <ScrollDownButton />
             <a
-              href="#"
-              className="inline-flex items-center gap-2 bg-[#145e7a] text-white
-             px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
+              href="https://www.facebook.com/blit.sono"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#145e7a] text-white px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             >
-              <FaPhone /> Nous contacter
+              <FaPhone /> Contactez-nous sur MP
             </a>
           </div>
         </div>
       </section>
+
       <div className="flex md:flex-row gap-6 p-4">
         <FiltersSidebar
+          categories={categories}
+          packNames={[]} 
           selectedCats={selectedCats}
           onCatsChange={setSelectedCats}
           selectedPrices={selectedPrices}
           onPricesChange={setSelectedPrices}
+          selectedPacks={[]}
+          onPacksChange={() => {}}
           resetAll={() => {
             setSelectedCats([]);
             setSelectedPrices([]);
@@ -188,13 +231,22 @@ export default function Catalogue() {
                       isGrid ? "w-40 h-24" : "w-20 h-14"
                     }`}
                   />
-                  <h3
-                    className={`font-semibold text-[#1E2939] ${
-                      isGrid ? "mt-3 text-center" : ""
-                    } group-hover:text-[#18769C]`}
-                  >
-                    {m.nom}
-                  </h3>
+                  <div className="flex flex-row gap-2 items-center justify-center flex-wrap leading-[1.5em]">
+                    <h3
+                      className={`font-semibold text-[#1E2939] ${
+                        isGrid ? "mt-3 text-center" : ""
+                      } group-hover:text-[#18769C]`}
+                    >
+                      {m.nom}
+                    </h3>
+                    <p
+                      className={`font-semibold text-[#1E2939] ${
+                        isGrid ? "mt-3 text-center" : ""
+                      } group-hover:text-[#18769C]`}
+                    >
+                      - {m.prix} Ar
+                    </p>
+                  </div>
                   <div
                     className={`mt-2 flex items-center gap-1 ${
                       isGrid
@@ -229,18 +281,19 @@ export default function Catalogue() {
           </div>
         </div>
       </div>
+
       <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
-          <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[700px]">
-            <FaThumbsUp size={24} /> Merci d'avoir exploré le catalogue Blit Sono !
-          </h1>
-          <p className="w-[700px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4">
-             Chaque équipement a été
-        pensé pour sublimer vos événements. Notre équipe dévouée reste à vos
-        côtés pour vous guider, vous conseiller et vous assurer une expérience
-        100 % sereine. Réservez en toute confiance - chaque matériel compte pour
-        faire de votre projet un succès !
-          </p>
-        </div>
+        <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[700px]">
+          <FaThumbsUp size={24} /> Merci d'avoir exploré le catalogue Blit Sono
+          !
+        </h1>
+        <p className="w-[700px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4 text-[#1E2939]">
+          Chaque équipement a été pensé pour sublimer vos événements. Notre
+          équipe dévouée reste à vos côtés pour vous guider, vous conseiller et
+          vous assurer une expérience 100 % sereine. Réservez en toute confiance
+          – chaque matériel compte pour faire de votre projet un succès !
+        </p>
+      </div>
     </div>
   );
 }

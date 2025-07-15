@@ -28,11 +28,11 @@ const ScrollDownButton: React.FC<ScrollDownButtonProps> = ({
       onClick={scrollToSection}
       className="inline-flex items-center gap-2 bg-white text-[#18769C]
              font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition cursor-pointer"
-      aria-label="Faire défiler vers le catalogue"
+      aria-label="Faire défiler vers le pack"
       type="button"
     >
       <FaHeadphones />
-      Explorer notre catalogue
+      Explorer notre pack
     </button>
   );
 };

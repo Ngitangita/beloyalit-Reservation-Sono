@@ -58,6 +58,7 @@ export default function EspaceClient(): JSX.Element {
 
   return (
     <div className="text-[#575756]">
+      <title>Espace Client | Blit Sono</title>
       <section className="bgImageReservation">
         <div
           className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
@@ -82,10 +83,12 @@ export default function EspaceClient(): JSX.Element {
               <FaHeadphones /> Explorer notre catalogue
             </Link>
             <Link
-              to="#"
+              to="https://www.facebook.com/blit.sono"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#145e7a] text-white px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             >
-              <FaPhone /> Nous contacter
+              <FaPhone /> Contactez-nous sur MP
             </Link>
           </div>
         </div>
@@ -125,7 +128,7 @@ export default function EspaceClient(): JSX.Element {
                   <td className="p-3">{r.date}</td>
                   <td className="p-3">{joinAndTruncate(r.materiel)}</td>
                   <td className="p-3">{r.lieu}</td>
-                   <td
+                  <td
                     className={`p-3 font-semibold flex flex-row items-center ${
                       r.statut === "Confirmée"
                         ? "text-green-600"

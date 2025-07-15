@@ -9,12 +9,25 @@ CREATE TABLE matériels (
     id SERIAL PRIMARY KEY, 
     nom VARCHAR(150) NOT NULL, 
     description TEXT, 
-    catégorie_id INT NOT NULL, 
+    categorie_id INT NOT NULL, 
     prix_location NUMERIC(10,2) NOT NULL, 
     stock INT DEFAULT 0, 
     image_url VARCHAR(255), 
     FOREIGN KEY (catégorie_id) REFERENCES catégories(id) 
+    --      stock_total      INT NOT NULL DEFAULT 0,
+    --   stock_available  INT NOT NULL DEFAULT 0,
     ); 
+
+--   Détails techniques (EAV)
+-- CREATE TABLE matériels_details (
+--   detail_id   SERIAL PRIMARY KEY,
+--   matériel_id  INT NOT NULL REFERENCES matériels(matériel_id) ON DELETE CASCADE,
+--   spec_key    VARCHAR(100) NOT NULL,
+--   spec_value  VARCHAR(255) NOT NULL
+-- );
+
+-- CREATE INDEX idx_matériel_details_matériel_id
+--   ON matériels_details(matériel_id);
 
 -- Table : packs 
 CREATE TABLE packs ( 

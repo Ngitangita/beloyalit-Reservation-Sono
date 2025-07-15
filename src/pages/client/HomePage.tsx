@@ -1,119 +1,84 @@
 import { useLocation } from "react-router-dom";
 import type { JSX } from "react";
-import MaterielsCategories from "~/components/clientHome/MaterielsCategories";
+import MaterielsPack from "~/components/clientHome/MaterielsPack";
 import Materiels from "~/components/clientHome/Materiels";
 import WelcomeBlitSono from "~/components/clientHome/WelcomeBlitSono";
 
 const materiels: (MaterielType & { path: string })[] = [
   {
     id: 1,
-    nom: "Sonorisation",
-    description: "...",
-    catégorie_id: 1,
-    prix_location: 150.00,
-    image_url: "/sonorisation.jpg",
-    path: "/catalogues"
+    nom: "Pack Mariage Classique",
+    description: "Contient tout le nécessaire pour une sonorisation de mariage",
+    prix_location: "250.000 Ar",
   },
   {
     id: 2,
-    nom: "Deejay",
-    description: "Matériel professionnel pour DJ : platines, contrôleurs, casques audio",
-    catégorie_id: 2,
-    prix_location: 120.00,
-    image_url: "/deejay.jpg",
-    path: "/catalogues"
+    nom: "Pack DJ Débutant",
+    description: "Le pack parfait pour commencer dans le mix",
+    prix_location: "180.000 Ar",
   },
   {
     id: 3,
-    nom: "Home studio",
-    description: "Pack complet pour l'enregistrement à domicile (interface audio, micro, casque)",
-    catégorie_id: 3,
-    prix_location: 100.00,
-    image_url: "/home-studio.jpeg",
-    path: "/catalogues"
+    nom: "Pack Lumière Événement",
+    description: "Jeux de lumière pour animer vos soirées",
+    prix_location: "120.000 Ar",
   },
   {
     id: 4,
-    nom: "Instruments de musique",
-    description: "Guitares, claviers, batteries et autres instruments acoustiques ou électroniques",
-    catégorie_id: 4,
-    prix_location: 80.00,
-    image_url: "/instruments-des-musiques.jpeg",
-    path: "/catalogues"
+    nom: "Pack Conférence Pro",
+    description: "Matériel idéal pour conférences et présentations",
+    prix_location: "150.000 Ar",
   },
   {
     id: 5,
-    nom: "HiFi & vidéo",
-    description: "Systèmes HiFi, lecteurs Blu-ray, vidéoprojecteurs, écrans",
-    catégorie_id: 5,
-    prix_location: 90.00,
-     image_url: "/hifi-video.jpeg",
-    path: "/catalogues"
+    nom: "Pack Mariage Premium",
+    description: "Pack complet haut de gamme avec éclairages et sono professionnels",
+    prix_location: "500.000 Ar",
   },
   {
     id: 6,
-    nom: "Structure",
-    description: "Structures métalliques pour montage de scènes, supports de lumière, tours",
-    catégorie_id: 6,
-    prix_location: 200.00,
-    image_url: "/structure.jpeg",
-    path: "/catalogues"
+    nom: "Pack Église",
+    description: "Pour la sonorisation de cérémonies religieuses",
+    prix_location: "180.000 Ar",
   },
   {
     id: 7,
-    nom: "Flight case",
-    description: "Caisses de transport renforcées pour protéger le matériel lors des déplacements",
-    catégorie_id: 7,
-    prix_location: 40.00,
-    image_url: "/flight-case.jpeg",
-    path: "/catalogues"
+    nom: "Pack Projection Vidéo",
+    description: "Vidéoprojecteur, écran et sono légère pour projections",
+    prix_location: "220.000 Ar",
   },
   {
     id: 8,
-    nom: "Microphones",
-    description: "Microphones dynamiques, à condensateur, sans fil",
-    catégorie_id: 8,
-    prix_location: 30.00,
-    image_url: "/microphones.jpeg",
-    path: "/catalogues"
+    nom: "Pack Lumière Scénique",
+    description: "Éclairage de scène avec effets LED et contrôleur DMX",
+    prix_location: "300.000 Ar",
   },
   {
-     id: 9,
-    nom: "Enceintes",
-    description: "Enceintes actives/passives pour sonorisation d'événements",
-    catégorie_id: 9,
-    prix_location: 75.00,
-    image_url: "/enceinte.jpeg",
-    path: "/catalogues",
+    id: 9,
+    nom: "Pack Soirée Privée",
+    description: "Enceintes, lumières disco et micro pour petites fêtes",
+    prix_location: "180.000 Ar",
   },
   {
     id: 10,
-    nom: "Consoles de mixage",
-    description: "Consoles de mixage audio pour DJ ou studio",
-    catégorie_id: 10,
-    prix_location: 95.00,
-    image_url: "/console-de-mixage.jpeg",
-    path: "/catalogues"
+    nom: "Pack Formation",
+    description: "Matériel de sonorisation pour formations en salle",
+    prix_location: "170.000 Ar",
   },
   {
     id: 11,
-    nom: "Accessoires divers",
-    description: "Câbles, pieds de micro, supports d'enceintes et autres accessoires",
-    catégorie_id: 11,
-    prix_location: 20.00,
-    image_url: "/accessoire-divers.jpeg",
-    path: "/catalogues"
+    nom: "Pack Studio Débutant",
+    description: "Interface audio, micro studio, casque et pieds micro",
+    prix_location: "280.000 Ar",
   },
   {
     id: 12,
-    nom: "Packs événementiels",
-    description: "Packs tout-en-un pour l'organisation d'événements (son, lumière, scène)",
-    catégorie_id: 12,
-    prix_location: 300.00,
-    image_url: "/pack-evenementiel.jpeg",
-    path: "/catalogues"
-  },
+    nom: "Pack Extérieur",
+    description: "Sono résistante pour événements en plein air",
+    prix_location: "400.000 Ar",
+  }
 ];
+
 
 
  function HomePage(): JSX.Element {
@@ -121,8 +86,9 @@ const materiels: (MaterielType & { path: string })[] = [
 
   return (
     <div>
+        <title>Accueil | Blit Sono - Événements en musique</title>
       <WelcomeBlitSono/>
-      <MaterielsCategories materiels={materiels} location={location} />
+      <MaterielsPack materiels={materiels} location={location} />
       <Materiels />
     </div>
   );

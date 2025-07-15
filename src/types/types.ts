@@ -28,12 +28,20 @@ export type MenuCategorie = {
 }
 
 export type MaterielType = {
-  id: number;
-  nom: string;
-  description?: string;
-  catégorie_id: number;
-  prix_location: number;
-  image_url?: string;
+  prix: number;
+  description: string;
+  productId: {
+    id: number;
+    nom: string;
+    categoryId: {
+      name: string;
+    };
+    image_url: string;
+    prix: number;
+    stock_total: number;
+    stock_available: number;
+    description: string;
+  };
 }
 
 export type MaterielsType =  Pick<MaterielType, "id" | "nom" | "image_url">;
