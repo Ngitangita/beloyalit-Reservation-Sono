@@ -510,7 +510,7 @@ export default function ReservationPacks() {
           }}
         />
 
-        <div className="flex-1">
+        <div className="w-full flex flex-col items-end  justify-end pr-10">
           <div className="flex justify-between items-center mb-4">
             <div>
               <button

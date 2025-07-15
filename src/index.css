@@ -12,6 +12,7 @@ html {
   font-size: 90.5%;
 }
 
+
 .bgImage{
   background-image: url('/accueil.jpeg');
   background-size: cover;
@@ -86,6 +87,9 @@ html {
     revealText 15s steps(17) infinite,
     blinkCursor 0.75s step-end infinite;
 }
+
+
+
 
 
 
