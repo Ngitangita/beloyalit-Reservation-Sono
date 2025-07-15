@@ -31,7 +31,7 @@ type Props = {
   resetAll: () => void;
 };
 
-export default function FiltersSidebar({ selectedCats, onCatsChange, selectedPrices, onPricesChange, resetAll }: Props) {
+export default function FiltersCategory({ selectedCats, onCatsChange, selectedPrices, onPricesChange, resetAll }: Props) {
   const [showAllCats, setShowAllCats] = useState(false);
   const [showAllPrices, setShowAllPrices] = useState(false);
 

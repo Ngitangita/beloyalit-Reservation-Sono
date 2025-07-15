@@ -1,9 +1,9 @@
-// Catalogue.tsx
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import FiltersSidebar, {
+import FiltersCategory, {
   priceRanges,
-} from "~/components/clientHome/FiltersSidebar";
+} from "~/components/clientHome/FiltersCategory";
 import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import type { MaterielsType } from "~/types/types";
@@ -164,7 +164,7 @@ export default function Catalogue() {
       </section>
 
       <div className="flex md:flex-row gap-6 p-4">
-        <FiltersSidebar
+        <FiltersCategory
           categories={categories}
           packNames={[]} 
           selectedCats={selectedCats}

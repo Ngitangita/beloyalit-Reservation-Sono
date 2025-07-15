@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import FiltersSidebar from "~/components/clientHome/FiltersSidebar";
+import FiltersPacks from "~/components/clientHome/FiltersPacks";
 import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import { FaShoppingCart, FaHeadphones, FaPhone, FaThumbsUp } from "react-icons/fa";
@@ -24,8 +24,8 @@ type ProductType = {
 };
 
 type PackItemsType = {
-  pack: PackType;
-  product: ProductType;
+  packId: PackType;
+  productId: ProductType;
   quantite: number;
 };
 
@@ -276,38 +276,48 @@ export default function ReservationPacks() {
   const q = searchParams.get("q")?.toLowerCase() || "";
   const cat = searchParams.get("cat") || "";
   const [isGrid, setIsGrid] = useState(true);
-  const [selectedPrices, setSelectedPrices] = useState([]);
-  const [selectedCats, setSelectedCats] = useState([]);
-  const [initializedCat, setInitializedCat] = useState(false);
-  const [filtered, setFiltered] = useState(allPackItems);
+  const [selectedPrices, setSelectedPrices] = useState<typeof priceRanges>([]);
+  const [selectedPacks, setSelectedPacks] = useState<string[]>([]);
+  const [initializedPack, setInitializedPack] = useState(false);
+  const [filtered, setFiltered] = useState<PackItemsType[]>(allPackItems);
+
   const addToCart = useCartStore((s) => s.addToCart);
-  const [addedIds, setAddedIds] = useState(new Set());
+  const [addedIds, setAddedIds] = useState<Set<number>>(new Set());
+
+  const packNames = Array.from(new Set(allPackItems.map((m) => m.packId.name)));
 
   useEffect(() => {
-    if (!initializedCat && cat) {
-      const found = allPackItems.find((m) => m.packId.nom === cat);
-      if (found) setSelectedCats([found.packId.nom]);
-      setInitializedCat(true);
+    if (!initializedPack && cat) {
+      const found = allPackItems.find((m) => m.packId.name === cat);
+      if (found) setSelectedPacks([found.packId.name]);
+      setInitializedPack(true);
     }
-  }, [cat, initializedCat]);
+  }, [cat, initializedPack]);
 
   useEffect(() => {
     let res = allPackItems;
-    if (q) res = res.filter((item) => item.packId.nom.toLowerCase().includes(q));
-    if (selectedCats.length > 0)
-      res = res.filter((item) => selectedCats.includes(item.packId.nom));
+
+    if (q) {
+      res = res.filter((item) => item.packId.name.toLowerCase().includes(q));
+    }
+
+    if (selectedPacks.length > 0) {
+      res = res.filter((item) => selectedPacks.includes(item.packId.name));
+    }
+
     if (selectedPrices.length > 0) {
       res = res.filter((item) =>
         selectedPrices.some((pr) => item.productId.prix >= pr.min && item.productId.prix < pr.max)
       );
     }
-    setFiltered(res);
-  }, [q, selectedCats, selectedPrices]);
 
-  const toggleAdded = (id, item) => {
+    setFiltered(res);
+  }, [q, selectedPacks, selectedPrices]);
+
+  const toggleAdded = (id: number, item: PackItemsType) => {
     addToCart({
       id: item.packId.id,
-      name: item.packId.nom,
+      name: item.packId.name,
       image_url: item.productId.image_url,
       price: item.productId.prix,
     });
@@ -324,6 +334,7 @@ export default function ReservationPacks() {
   return (
     <div>
       <title>Réservation Pack | Blit Sono - Son & Lumière</title>
+
       <section className="bgImagePack">
         <div className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939] text-white py-16 w-full flex flex-col pl-30">
           <h1 className="text-3xl font-extrabold mb-4 flex gap-1 w-[800px]">
@@ -348,29 +359,35 @@ export default function ReservationPacks() {
       </section>
 
       <div className="flex md:flex-row gap-6 p-4">
-        <FiltersSidebar
-          selectedCats={selectedCats}
-          onCatsChange={setSelectedCats}
-          selectedPrices={selectedPrices}
-          onPricesChange={setSelectedPrices}
-          resetAll={() => {
-            setSelectedCats([]);
-            setSelectedPrices([]);
-          }}
-        />
+        <FiltersPacks
+  packNames={packNames}
+  selectedPacks={selectedPacks}
+  onPacksChange={setSelectedPacks}
+  selectedPrices={selectedPrices}
+  onPricesChange={setSelectedPrices}
+  resetAll={() => {
+    setSelectedPacks([]);
+    setSelectedPrices([]);
+  }}
+/>
+
 
         <div className="flex-1">
           <div className="flex justify-between items-center mb-4">
             <div className="text-[#575756]">
               <button
                 onClick={() => setIsGrid(true)}
-                className={`px-3 py-1 rounded cursor-pointer ${isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"}`}
+                className={`px-3 py-1 rounded cursor-pointer ${
+                  isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
+                }`}
               >
                 🟦 Carte
               </button>
               <button
                 onClick={() => setIsGrid(false)}
-                className={`px-3 py-1 ml-2 rounded cursor-pointer ${!isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"}`}
+                className={`px-3 py-1 ml-2 rounded cursor-pointer ${
+                  !isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
+                }`}
               >
                 📋 Liste
               </button>
@@ -395,10 +412,8 @@ export default function ReservationPacks() {
               filtered.map((m, index) => (
                 <div
                   key={index}
-                  className={`group  transition duration-300 rounded p-3 relative ${
-                    isGrid
-                      ? "flex flex-col items-center hover:scale-105"
-                      : "flex items-center gap-4 hover:bg-gray-100"
+                  className={`group transition duration-300 rounded p-3 relative ${
+                    isGrid ? "flex flex-col items-center hover:scale-105" : "flex items-center gap-4 hover:bg-gray-100"
                   }`}
                 >
                   <img
@@ -406,17 +421,23 @@ export default function ReservationPacks() {
                     alt={m.productId.nom}
                     className={`rounded object-cover ${isGrid ? "w-40 h-24" : "w-20 h-14"}`}
                   />
-                  <h3
-                    className={`font-semibold text-[#1E2939] ${isGrid ? "mt-3 text-left" : ""} group-hover:text-[#18769C]`}
-                  >
+                  <h3 className={`font-semibold text-[#1E2939] ${isGrid ? "mt-3 text-left" : ""} group-hover:text-[#18769C]`}>
                     {m.packId.name}
                   </h3>
-                  <p>Prix: <strong>{m.packId.price_override}</strong> Ar</p>
-                    <p>Qtt: <strong>{m.quantite}</strong> article{m.quantite > 1 ? "s" : ""}</p>
+                  <p>
+                    Prix: <strong>{m.packId.price_override}</strong> Ar
+                  </p>
+                  <p>
+                    Qtt: <strong>{m.quantite}</strong> article{m.quantite > 1 ? "s" : ""}
+                  </p>
                   <p className={`text-sm text-gray-500 ${isGrid ? "text-left" : "hidden md:block"}`}>
                     {m.packId.description}
                   </p>
-                  <div className={`mt-2 flex items-center gap-1 ${isGrid ? "absolute left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity" : "ml-auto"}`}>
+                  <div className={`mt-2 flex items-center gap-1 ${
+                    isGrid
+                      ? "absolute left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      : "ml-auto"
+                  }`}>
                     <Link
                       to={`/pack-detail/${m.packId.id}`}
                       className="w-[90px] border border-[#18769C] text-[#18769C] bg-white p-1.5 rounded-l-full hover:bg-[#18769C] hover:text-white text-sm flex justify-center"
@@ -426,9 +447,7 @@ export default function ReservationPacks() {
                     <button
                       onClick={() => toggleAdded(m.packId.id, m)}
                       className={`p-2 pr-3 rounded-r-full cursor-pointer ${
-                        addedIds.has(m.packId.id)
-                          ? "bg-green-500 hover:bg-green-600"
-                          : "bg-[#18769C] hover:bg-[#0f5a70]"
+                        addedIds.has(m.packId.id) ? "bg-green-500 hover:bg-green-600" : "bg-[#18769C] hover:bg-[#0f5a70]"
                       } text-white transition duration-200`}
                     >
                       {addedIds.has(m.packId.id) ? "✓" : <FaShoppingCart className="text-lg" />}
@@ -446,7 +465,9 @@ export default function ReservationPacks() {
           <FaThumbsUp size={24} /> Merci d'avoir consulté nos packs à réserver !
         </h1>
         <p className="w-[700px] text-lg italic text-start flex items-center border-l-4 border-[#18769C] pl-4">
-          Chaque pack est conçu pour répondre à vos besoins événementiels. Faites confiance à notre équipe pour vous orienter dans votre réservation et garantir la réussite de votre projet.
+          Chaque pack est conçu pour répondre à vos besoins événementiels. Faites confiance à 
+          notre équipe pour vous orienter dans votre réservation et garantir la réussite de 
+          votre projet.
         </p>
       </div>
     </div>
