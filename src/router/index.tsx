@@ -17,6 +17,9 @@ import ReservationPack from "~/pages/client/ReservationPack";
 import EspaceClient from "~/pages/client/Espace-client";
 import Devis from "~/pages/client/Devis";
 import Facture from "~/pages/client/Facture";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 const router = createBrowserRouter([
    {

@@ -3,41 +3,21 @@ import { useParams, Link } from "react-router-dom";
 import { useCartStore } from "~/stores/useCartStore";
 import { FaHeadphones, FaPhone, FaThumbsUp } from "react-icons/fa";
 
-// Types
-
-type PackType = {
-  id: number;
-  name: string;
-  description: string;
-  price_override: number;
-  image_url?: string;
-};
-
+type PackType = { id: number; name: string; description: string; price_override: number; };
 type ProductType = {
-  id: number;
-  nom: string;
-  categoryId?: { name: string };
-  image_url: string;
-  prix: number;
-  stock_total: number;
-  stock_available: number;
-  description: string;
+  id: number; nom: string; categoryId?: { name: string }; image_url: string;
+  prix: number; stock_total: number; stock_available: number; description: string;
 };
-
-type PackItemsType = {
-  pack: PackType;
-  product: ProductType;
-  quantite: number;
-};
+type PackItemsType = { id: number; packId: PackType; productId: ProductType; quantite: number; };
 
 const allPackItems: PackItemsType[] = [
+ // Pack 1 : Mariage Classique avec 3 matériels
   {
     id: 1,
     packId: {
       id: 1,
       name: "Pack Mariage Classique",
-      description:
-        "Contient tout le nécessaire pour une sonorisation de mariage",
+      description: "Contient tout le nécessaire pour une sonorisation de mariage",
       price_override: 250000,
     },
     productId: {
@@ -48,17 +28,58 @@ const allPackItems: PackItemsType[] = [
       prix: 100,
       stock_total: 50,
       stock_available: 30,
-      description:
-        "Système électroacoustique complet pour diffuser et amplifier le son...",
+      description: "Système électroacoustique complet pour diffuser et amplifier le son...",
     },
-    quantite: 50,
+    quantite: 2,
   },
   {
     id: 2,
     packId: {
+      id: 1,
+      name: "Pack Mariage Classique",
+      description: "Le pack parfait pour commencer dans le mix",
+      price_override: 250000,
+    },
+    productId: {
+      id: 13,
+      nom: "Micro Shure SM58",
+      categoryId: { name: "Microphonie" },
+      image_url: "/micro.jpg",
+      prix: 90,
+      stock_total: 60,
+      stock_available: 40,
+      description: "Casque de monitoring fermé pour DJs...",
+    },
+    quantite: 4,
+  },
+  {
+    id: 3,
+    packId: {
+      id: 1,
+      name: "Pack Mariage Classique",
+      description: "Jeux de lumière pour animer vos soirées",
+      price_override: 250000,
+    },
+    productId: {
+      id: 14,
+      nom: "Lyre LED 60W",
+      categoryId: { name: "Éclairage" },
+      image_url: "/lyre-led.jpg",
+      prix: 60,
+      stock_total: 40,
+      stock_available: 35,
+      description: "Projecteur lyre motorisé RGBW 60W...",
+    },
+    quantite: 3,
+  },
+
+  // Pack 2 : DJ Débutant avec 3 matériels
+  {
+    id: 4,
+    packId: {
       id: 2,
       name: "Pack DJ Débutant",
-      description: "Le pack parfait pour commencer dans le mix",
+      description: "Matériel idéal pour conférences et présentations",
       price_override: 180000,
     },
     productId: {
@@ -69,16 +90,59 @@ const allPackItems: PackItemsType[] = [
       prix: 75,
       stock_total: 20,
       stock_available: 15,
-      description: "Casque de monitoring fermé pour DJs...",
+      description: "Micro cardioïde dynamique pour la voix...",
     },
-    quantite: 10,
+    quantite: 1,
   },
   {
-    id: 3,
+    id: 5,
+    packId: {
+      id: 2,
+      name: "Pack DJ Débutant",
+      description: "Pack complet haut de gamme avec éclairages et sono professionnels",
+      price_override: 180000,
+    },
+    productId: {
+      id: 15,
+      nom: "Contrôleur Pioneer DDJ-200",
+      categoryId: { name: "DJ" },
+      image_url: "/ddj-200.jpg",
+      prix: 150,
+      stock_total: 10,
+      stock_available: 8,
+      description: "Système audio professionnel pour grands événements.",
+    },
+    quantite: 1,
+  },
+  {
+    id: 6,
+    packId: {
+      id: 2,
+      name: "Pack DJ Débutant",
+      description: "Pour la sonorisation de cérémonies religieuses",
+      price_override: 180000,
+    },
+    productId: {
+      id: 16,
+      nom: "Micro Behringer XM8500",
+      categoryId: { name: "Microphonie" },
+      image_url: "/behringer-xm8500.jpg",
+      prix: 40,
+      stock_total: 25,
+      stock_available: 20,
+      description: "Micro discret pour pupitre ou autel.",
+    },
+    quantite: 1,
+  },
+
+
+  // Pack 3 : Lumière Événement avec 3 matériels
+  {
+    id: 7,
     packId: {
       id: 3,
       name: "Pack Lumière Événement",
-      description: "Jeux de lumière pour animer vos soirées",
+      description: "...",
       price_override: 120000,
     },
     productId: {
@@ -89,16 +153,58 @@ const allPackItems: PackItemsType[] = [
       prix: 60,
       stock_total: 40,
       stock_available: 35,
-      description: "Projecteur lyre motorisé RGBW 60W...",
+      description: "...",
     },
-    quantite: 12,
+    quantite: 2,
   },
   {
-    id: 4,
+    id: 8,
+    packId: {
+      id: 3,
+      name: "Pack Lumière Événement",
+      description: "...",
+      price_override: 120000,
+    },
+    productId: {
+      id: 17,
+      nom: "Barre LED DMX",
+      categoryId: { name: "Éclairage" },
+      image_url: "/barre-led.jpg",
+      prix: 120,
+      stock_total: 30,
+      stock_available: 20,
+      description: "...",
+    },
+    quantite: 1,
+  },
+  {
+    id: 9,
+    packId: {
+      id: 3,
+      name: "Pack Lumière Événement",
+      description: "...",
+      price_override: 120000,
+    },
+    productId: {
+      id: 18,
+      nom: "Effet stroboscope LED",
+      categoryId: { name: "Éclairage" },
+      image_url: "/strobe-led.jpg",
+      prix: 80,
+      stock_total: 15,
+      stock_available: 10,
+      description: "...",
+    },
+    quantite: 1,
+  },
+
+  // Pack 4 : Conférence Pro
+  {
+    id: 10,
     packId: {
       id: 4,
       name: "Pack Conférence Pro",
-      description: "Matériel idéal pour conférences et présentations",
+      description: "...",
       price_override: 150000,
     },
     productId: {
@@ -109,17 +215,58 @@ const allPackItems: PackItemsType[] = [
       prix: 90,
       stock_total: 60,
       stock_available: 40,
-      description: "Micro cardioïde dynamique pour la voix...",
+      description: "...",
     },
-    quantite: 8,
+    quantite: 3,
   },
   {
-    id: 5,
+    id: 11,
+    packId: {
+      id: 4,
+      name: "Pack Conférence Pro",
+      description: "...",
+      price_override: 150000,
+    },
+    productId: {
+      id: 19,
+      nom: "Projecteur Epson HD",
+      categoryId: { name: "Vidéo" },
+      image_url: "/videoprojecteur.jpg",
+      prix: 200,
+      stock_total: 8,
+      stock_available: 5,
+      description: "...",
+    },
+    quantite: 1,
+  },
+  {
+    id: 12,
+    packId: {
+      id: 4,
+      name: "Pack Conférence Pro",
+      description: "...",
+      price_override: 150000,
+    },
+    productId: {
+      id: 20,
+      nom: "Barre LED DMX",
+      categoryId: { name: "Éclairage" },
+      image_url: "/barre-led.jpg",
+      prix: 120,
+      stock_total: 30,
+      stock_available: 20,
+      description: "...",
+    },
+    quantite: 2,
+  },
+
+  // Pack 5 : Mariage Premium
+  {
+    id: 13,
     packId: {
       id: 5,
       name: "Pack Mariage Premium",
-      description:
-        "Pack complet haut de gamme avec éclairages et sono professionnels",
+      description: "...",
       price_override: 500000,
     },
     productId: {
@@ -130,16 +277,58 @@ const allPackItems: PackItemsType[] = [
       prix: 300,
       stock_total: 10,
       stock_available: 6,
-      description: "Système audio professionnel pour grands événements.",
+      description: "...",
+    },
+    quantite: 2,
+  },
+  {
+    id: 14,
+    packId: {
+      id: 5,
+      name: "Pack Mariage Premium",
+      description: "...",
+      price_override: 500000,
+    },
+    productId: {
+      id: 3,
+      nom: "Lyre LED 60W",
+      categoryId: { name: "Éclairage" },
+      image_url: "/lyre-led.jpg",
+      prix: 60,
+      stock_total: 40,
+      stock_available: 35,
+      description: "...",
     },
     quantite: 4,
   },
   {
-    id: 6,
+    id: 15,
+    packId: {
+      id: 5,
+      name: "Pack Mariage Premium",
+      description: "...",
+      price_override: 500000,
+    },
+    productId: {
+      id: 21,
+      nom: "Micro col de cygne",
+      categoryId: { name: "Microphonie" },
+      image_url: "/col-cygne.jpg",
+      prix: 65,
+      stock_total: 25,
+      stock_available: 18,
+      description: "...",
+    },
+    quantite: 3,
+  },
+
+  // Pack 6 : Église
+  {
+    id: 16,
     packId: {
       id: 6,
       name: "Pack Église",
-      description: "Pour la sonorisation de cérémonies religieuses",
+      description: "...",
       price_override: 180000,
     },
     productId: {
@@ -150,191 +339,96 @@ const allPackItems: PackItemsType[] = [
       prix: 65,
       stock_total: 25,
       stock_available: 18,
-      description: "Micro discret pour pupitre ou autel.",
-    },
-    quantite: 6,
-  },
-  {
-    id: 7,
-    packId: {
-      id: 7,
-      name: "Pack Projection Vidéo",
-      description: "Vidéoprojecteur, écran et sono légère pour projections",
-      price_override: 220000,
-    },
-    productId: {
-      id: 7,
-      nom: "Vidéoprojecteur Epson HD",
-      categoryId: { name: "Vidéo" },
-      image_url: "/videoprojecteur.jpg",
-      prix: 200,
-      stock_total: 8,
-      stock_available: 5,
-      description:
-        "Projecteur haute définition pour présentations et projections.",
+      description: "...",
     },
     quantite: 2,
   },
   {
-    id: 8,
+    id: 17,
     packId: {
-      id: 8,
-      name: "Pack Lumière Scénique",
-      description: "Éclairage de scène avec effets LED et contrôleur DMX",
-      price_override: 300000,
+      id: 6,
+      name: "Pack Église",
+      description: "...",
+      price_override: 180000,
     },
     productId: {
-      id: 8,
+      id: 22,
+      nom: "Enceinte JBL EON610",
+      categoryId: { name: "Sonorisation" },
+      image_url: "/enceinte-JBL.jpeg",
+      prix: 100,
+      stock_total: 50,
+      stock_available: 30,
+      description: "...",
+    },
+    quantite: 1,
+  },
+  {
+    id: 18,
+    packId: {
+      id: 6,
+      name: "Pack Église",
+      description: "...",
+      price_override: 180000,
+    },
+    productId: {
+      id: 23,
       nom: "Barre LED DMX",
       categoryId: { name: "Éclairage" },
       image_url: "/barre-led.jpg",
       prix: 120,
       stock_total: 30,
       stock_available: 20,
-      description: "Éclairage LED programmable pour scènes et spectacles.",
-    },
-    quantite: 5,
-  },
-  {
-    id: 9,
-    packId: {
-      id: 9,
-      name: "Pack Soirée Privée",
-      description: "Enceintes, lumières disco et micro pour petites fêtes",
-      price_override: 180000,
-    },
-    productId: {
-      id: 9,
-      nom: "Mini Pack Sono Bluetooth",
-      categoryId: { name: "Sonorisation" },
-      image_url: "/mini-sono.jpg",
-      prix: 150,
-      stock_total: 15,
-      stock_available: 10,
-      description: "Ensemble compact pour petites soirées entre amis.",
-    },
-    quantite: 3,
-  },
-  {
-    id: 10,
-    packId: {
-      id: 10,
-      name: "Pack Formation",
-      description: "Matériel de sonorisation pour formations en salle",
-      price_override: 170000,
-    },
-    productId: {
-      id: 10,
-      nom: "Système de conférence portable",
-      categoryId: { name: "Conférence" },
-      image_url: "/conference-pack.jpg",
-      prix: 110,
-      stock_total: 12,
-      stock_available: 7,
-      description: "Kit audio pour animateur/formateur + enceinte + micro.",
-    },
-    quantite: 2,
-  },
-  {
-    id: 11,
-    packId: {
-      id: 11,
-      name: "Pack Studio Débutant",
-      description: "Interface audio, micro studio, casque et pieds micro",
-      price_override: 280000,
-    },
-    productId: {
-      id: 11,
-      nom: "Kit d'enregistrement Focusrite",
-      categoryId: { name: "Studio" },
-      image_url: "/kit-studio.jpg",
-      prix: 250,
-      stock_total: 10,
-      stock_available: 4,
-      description: "Pack tout-en-un pour démarrer un home studio.",
+      description: "...",
     },
     quantite: 1,
-  },
-  {
-    id: 12,
-    packId: {
-      id: 12,
-      name: "Pack Extérieur",
-      description: "Sono résistante pour événements en plein air",
-      price_override: 400000,
-    },
-    productId: {
-      id: 12,
-      nom: "Enceinte étanche Outdoor",
-      categoryId: { name: "Sonorisation" },
-      image_url: "/outdoor-speaker.jpg",
-      prix: 300,
-      stock_total: 6,
-      stock_available: 4,
-      description: "Matériel robuste pour conditions extérieures.",
-    },
-    quantite: 2,
   },
 ];
 
 export default function PackDetail() {
   const { id } = useParams<{ id: string }>();
-  const packItem = allPackItems.find((p) => p.packId.id === Number(id));
+  const packIdNum = Number(id);
+  const packItems = allPackItems.filter((i) => i.packId.id === packIdNum);
+  const packInfo = packItems[0]?.packId;
   const addToCart = useCartStore((s) => s.addToCart);
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
     setAdded(false);
-  }, [id]);
+  }, [packIdNum]);
 
-  if (!packItem) {
-    return <div className="p-4">Pack non trouvé.</div>;
-  }
+  if (!packInfo) return <div className="p-4">Pack non trouvé.</div>;
 
   const handleAdd = () => {
-    addToCart({
-      id: packItem.packId.id,
-      name: packItem.packId.name,
-      price: packItem.pack.price_override,
-    });
+    packItems.forEach((item) =>
+      addToCart({
+        id: item.productId.id,
+        name: item.productId.nom,
+        image_url: item.productId.image_url,
+        price: item.productId.prix,
+      })
+    );
     setAdded(true);
   };
 
   return (
     <div>
-      <title>Détail du pack | Blit Sono</title>
-      <section
-        className="bg-cover bg-center bg-no-repeat bgImagePack"
-      >
-        <div
-          className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
-         text-white py-10 px-6 pl-16"
-        >
-          <h1 className="text-3xl font-extrabold mb-4 flex gap-2 items-center">
+      <section className="bgCover bg-center bg-no-repeat bgImagePack">
+        <div className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939] text-white py-10 px-6 pl-16">
+          <h1 className="text-3xl font-extrabold flex items-center gap-2">
             <FaHeadphones className="text-4xl text-[#18769C]" />
-            Détail du {packItem.packId.name}
+            Détail du {packInfo.name}
           </h1>
           <p className="text-lg italic border-l-4 border-[#18769C] pl-4">
-            {packItem.packId.description} -{" "}
-            <strong>{packItem.packId.price_override} Ar</strong> pour{" "}
-            <strong> {packItem.quantite} article{packItem.quantite > 1 ? "s" : ""}</strong>
+            {packInfo.description}<br />
+            <strong>{packInfo.price_override} Ar</strong>
           </p>
-
           <div className="mt-6 flex gap-4">
-            <Link
-               to="/reservation-pack"
-              className="bg-white text-[#18769C] font-semibold flex flex-row items-center gap-3
-               p-3 rounded-lg hover:bg-gray-100"
-            >
+            <Link to="/reservation-pack" className="bg-white text-[#18769C] font-semibold flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100">
               <FaHeadphones /> Voir tous les packs
             </Link>
-            <Link
-              to="https://www.facebook.com/blit.sono"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#145e7a] text-white p-3 rounded-lg hover:bg-[#0f4a63]
-              flex flex-row items-center gap-3"
-            >
+            <Link to="https://www.facebook.com/blit.sono" target="_blank" rel="noopener noreferrer"
+              className="bg-[#145e7a] text-white p-3 rounded-lg hover:bg-[#0f4a63] flex items-center gap-3">
               <FaPhone /> Contactez-nous sur MP
             </Link>
           </div>
@@ -343,70 +437,49 @@ export default function PackDetail() {
 
       <section className="p-6">
         <div className="flex justify-end gap-4 mb-4">
-          <Link
-            to="/reservation-pack"
-            className="text-[#18769C] hover:underline text-lg"
-          >
-            ← Retour aux packs
-          </Link>
+          <Link to="/reservation-pack" className="text-[#18769C] hover:underline text-lg">← Retour aux packs</Link>
           <button
             onClick={handleAdd}
             className={`px-6 py-3 rounded text-white transition duration-200 ${
-              added
-                ? "bg-green-500 hover:bg-green-600"
-                : "bg-[#18769C] hover:bg-[#0f5a70]"
+              added ? "bg-green-500 hover:bg-green-600" : "bg-[#18769C] hover:bg-[#0f5a70]"
             }`}
           >
-            {added ? "Ajouté \u2713" : "Ajouter au panier"}
+            {added ? "Ajouté ✓" : "Ajouter au panier"}
           </button>
         </div>
 
+        {/* Ici, plus de slider, uniquement le tableau */}
         <table className="w-full table-auto">
           <thead className="bg-gray-100">
             <tr>
-              {[
-                "Matériel",
-                "Prix",
-                "Stock total",
-                "Stock dispo",
-                "category",
-                "Description",
-              ].map((header) => (
-                <th key={header} className="p-3 text-left">
-                  {header}
-                </th>
+              {["Matériel", "Prix", "Stock total", "Stock dispo", "Catégorie", "Description", "Quantité"].map(h => (
+                <th key={h} className="p-3 text-left">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {allPackItems
-              .filter((item) => item.packId.id === Number(id))
-              .map((item, index) => (
-                <tr key={index} className="even:bg-gray-50">
-                  <td className="p-3 flex items-center gap-3">
-                    <img
-                      src={item.productId.image_url}
-                      alt={item.productId.nom}
-                      className="w-12 h-12 object-cover rounded"
-                    />
-                    {item.productId.nom}
-                  </td>
-                  <td className="p-3">{item.productId.prix} Ar</td>
-                  <td className="p-3">{item.productId.stock_total}</td>
-                  <td className="p-3">{item.productId.stock_available}</td>
-                  <td className="p-3">{item.productId.categoryId.name}</td>
-                  <td className="p-3">{item.productId.description}</td>
-                </tr>
-              ))}
+            {packItems.map(item => (
+              <tr key={item.id} className="even:bg-gray-50">
+                <td className="p-3 flex items-center gap-3">
+                  <img src={item.productId.image_url} alt={item.productId.nom} className="w-12 h-12 object-cover rounded" />
+                  {item.productId.nom}
+                </td>
+                <td className="p-3">{item.productId.prix} Ar</td>
+                <td className="p-3">{item.productId.stock_total}</td>
+                <td className="p-3">{item.productId.stock_available}</td>
+                <td className="p-3">{item.productId.categoryId?.name}</td>
+                <td className="p-3">{item.productId.description}</td>
+                <td className="p-3">{item.quantite}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>
-      <div className=" text-[#1E2939] py-10 px-6 text-right">
-        <p className="w-full md:w-[600px] text-left ml-auto text-lg italic border-l-4 border-[#18769C] pl-4">
-          <FaThumbsUp className="inline-block mr-2 text-2xl align-middl text-[#18769C]" />
-          Merci de considérer le <strong className="text-[#18769C]">{packItem.packId.name}</strong> avec
-          BlitSono ! Ce pack est conçu pour offrir une solution complète et de
-          qualité. Réservez-le maintenant !
+
+      <div className="text-[#1E2939] py-10 px-6">
+        <p className="w-full md:w-[600px] ml-auto text-lg italic border-l-4 border-[#18769C] pl-4">
+          <FaThumbsUp className="inline-block mr-2 text-2xl text-[#18769C]" />
+          Merci de considérer le <strong className="text-[#18769C]">{packInfo.name}</strong> avec BlitSono !
         </p>
       </div>
     </div>

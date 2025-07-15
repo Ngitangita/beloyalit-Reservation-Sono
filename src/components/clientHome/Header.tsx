@@ -79,7 +79,7 @@ export default function Header(): JSX.Element {
           <Search />
           <div className="flex gap-4">
             <Link to="/basket" className="relative">
-              <FaShoppingCart className="text-2xl hover:text-[#18769C]" />
+              <FaShoppingCart className="text-2xl hover:text-[#18769C] transition duration-300 hover:scale-105" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
                   {totalItems}
@@ -87,11 +87,11 @@ export default function Header(): JSX.Element {
               )}
             </Link>
             <Link to="/sign-in">
-              <FaUser className="text-2xl hover:text-[#18769C]" />
+              <FaUser className="text-2xl hover:text-[#18769C] transition duration-300 hover:scale-105" />
             </Link>
             {isAuth && (
               <button onClick={logout} className="cursor-pointer">
-                <MdLogin className="text-2xl hover:text-[#18769C]" />
+                <MdLogin className="text-2xl hover:text-[#18769C] transition duration-300 hover:scale-105" />
               </button>
             )}
           </div>
@@ -123,14 +123,16 @@ export default function Header(): JSX.Element {
             )}
           </nav>
           <div className="flex gap-4 mt-4">
-            <Link to="/basket" onClick={() => setOpen(false)}>
+            <Link to="/basket" onClick={() => setOpen(false)}
+            className="transition duration-300 hover:scale-105">
               <FaShoppingCart className="text-2xl" />
             </Link>
-            <Link to="/sign-in" onClick={() => setOpen(false)}>
+            <Link to="/sign-in" onClick={() => setOpen(false)} 
+            className="transition duration-300 hover:scale-105">
               <FaUser className="text-2xl" />
             </Link>
             {isAuth && (
-              <button onClick={logout}>
+              <button onClick={logout} className="transition duration-300 hover:scale-105">
                 <MdLogin className="text-2xl" />
               </button>
             )}
