@@ -42,24 +42,20 @@ export const SignIn = () => {
         },
         {
           onSuccess: (data) => {
-            console.log("Connexion réussie", data);
-            // setToken(data.token);
-            // setType(data.type);
-            // setUser({
-            //   email: data.email,
-            //   firstName: data.firstName,
-            //   role: data.role,
-            // });
+            setToken(data.token);
+            setUser({
+              email: data.email,
+              firstName: data.firstName,
+              role: data.role,
+            });
             setIsAuthenticated(true);
           },
           onError: (error) => {
-            // setIsAuthenticated(false);
-            // setToken(null);
-            // setType(null);
-            // setUser(null);
+            setIsAuthenticated(false);
+            setToken(null);
+            setUser(null);
             setIsAuthenticated(false);
             console.error("Erreur de connexion", error);
-            alert("Erreur de connexion, veuillez vérifier vos identifiants.");
           },
         }
       );

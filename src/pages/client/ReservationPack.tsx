@@ -238,7 +238,7 @@ const allPackItems: PackItemsType[] = [
       id: 4,
       nom: "Micro Shure SM58",
       categoryId: { name: "Microphonie" },
-      image_url: "/micro.jpg",
+      image_url: "/micro.jpeg",
       prix: 90,
       stock_total: 60,
       stock_available: 40,
@@ -278,7 +278,7 @@ const allPackItems: PackItemsType[] = [
       id: 20,
       nom: "Barre LED DMX",
       categoryId: { name: "Éclairage" },
-      image_url: "/barre-led.jpg",
+      image_url: "/barre-led.jpeg",
       prix: 120,
       stock_total: 30,
       stock_available: 20,
@@ -362,7 +362,7 @@ const allPackItems: PackItemsType[] = [
       id: 6,
       nom: "Micro col de cygne",
       categoryId: { name: "Microphonie" },
-      image_url: "/col-cygne.jpg",
+      image_url: "/col-cygne.jpeg",
       prix: 65,
       stock_total: 25,
       stock_available: 18,
@@ -402,7 +402,7 @@ const allPackItems: PackItemsType[] = [
       id: 23,
       nom: "Barre LED DMX",
       categoryId: { name: "Éclairage" },
-      image_url: "/barre-led.jpg",
+      image_url: "/barre-led-dmx.jpg",
       prix: 120,
       stock_total: 30,
       stock_available: 20,
@@ -605,7 +605,7 @@ export default function ReservationPacks() {
                 return (
                   <div
                     key={pack.id}
-                    className="flex items-center justify-between p-3 rounded"
+                    className="flex items-center justify-between p-3 rounded border-b border-gray-500 w-[900px]"
                   >
                     <div>
                       <h3 className="font-semibold">{pack.name}</h3>

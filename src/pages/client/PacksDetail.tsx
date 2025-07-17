@@ -11,7 +11,7 @@ type ProductType = {
 type PackItemsType = { id: number; packId: PackType; productId: ProductType; quantite: number; };
 
 const allPackItems: PackItemsType[] = [
- // Pack 1 : Mariage Classique avec 3 matériels
+  // Pack 1 : Mariage Classique avec 3 matériels
   {
     id: 1,
     packId: {
@@ -135,14 +135,13 @@ const allPackItems: PackItemsType[] = [
     quantite: 1,
   },
 
-
   // Pack 3 : Lumière Événement avec 3 matériels
   {
     id: 7,
     packId: {
       id: 3,
       name: "Pack Lumière Événement",
-      description: "...",
+      description: "Vidéoprojecteur, écran et sono légère pour projections",
       price_override: 120000,
     },
     productId: {
@@ -211,7 +210,7 @@ const allPackItems: PackItemsType[] = [
       id: 4,
       nom: "Micro Shure SM58",
       categoryId: { name: "Microphonie" },
-      image_url: "/micro.jpg",
+      image_url: "/micro.jpeg",
       prix: 90,
       stock_total: 60,
       stock_available: 40,
@@ -244,18 +243,18 @@ const allPackItems: PackItemsType[] = [
     packId: {
       id: 4,
       name: "Pack Conférence Pro",
-      description: "...",
+      description: "Éclairage de scène avec effets LED et contrôleur DMX",
       price_override: 150000,
     },
     productId: {
       id: 20,
       nom: "Barre LED DMX",
       categoryId: { name: "Éclairage" },
-      image_url: "/barre-led.jpg",
+      image_url: "/barre-led.jpeg",
       prix: 120,
       stock_total: 30,
       stock_available: 20,
-      description: "...",
+      description: "Éclairage de scène avec effets LED et contrôleur DMX",
     },
     quantite: 2,
   },
@@ -266,7 +265,7 @@ const allPackItems: PackItemsType[] = [
     packId: {
       id: 5,
       name: "Pack Mariage Premium",
-      description: "...",
+      description: "Projecteur haute définition pour présentations et projections.",
       price_override: 500000,
     },
     productId: {
@@ -277,7 +276,7 @@ const allPackItems: PackItemsType[] = [
       prix: 300,
       stock_total: 10,
       stock_available: 6,
-      description: "...",
+      description: "Éclairage de scène avec effets LED et contrôleur DMX",
     },
     quantite: 2,
   },
@@ -335,7 +334,7 @@ const allPackItems: PackItemsType[] = [
       id: 6,
       nom: "Micro col de cygne",
       categoryId: { name: "Microphonie" },
-      image_url: "/col-cygne.jpg",
+      image_url: "/col-cygne.jpeg",
       prix: 65,
       stock_total: 25,
       stock_available: 18,
@@ -375,7 +374,7 @@ const allPackItems: PackItemsType[] = [
       id: 23,
       nom: "Barre LED DMX",
       categoryId: { name: "Éclairage" },
-      image_url: "/barre-led.jpg",
+      image_url: "/barre-led-dmx.jpg",
       prix: 120,
       stock_total: 30,
       stock_available: 20,

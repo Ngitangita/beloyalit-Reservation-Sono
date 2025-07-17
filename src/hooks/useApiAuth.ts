@@ -1,22 +1,31 @@
-import axios from "axios";
+import axiosClient from "~/conf/axiosClient";
+
+export type UserType = {
+  nom: string;
+  prenom: string;
+  email: string;
+  mot_de_passe: string;
+  telephone?: string;         
+  role_id: number;
+  date_inscription: string;   
+};
 
 export type SigninResponse = {
-  email: string;
-  role: "admin" | "client";
   token: string;
-  firstName: string;
+  user: UserType;
 };
+
 
 export function useApiAuth() {
 
   const signup = async (email: string, password: string) => {
-    await axios.post("/api/auth/signup", { email, password });
+    await axiosClient.post("/signup", { email, mot_de_passe: password });
   };
 
   const signin = async (email: string, password: string) => {
-    const { data } = await axios.post<SigninResponse>("/api/auth/signin", {
+    const { data } = await axiosClient.post<SigninResponse>("/login", {
       email,
-      password,
+      mot_de_passe: password,
     });
 
     return data;
