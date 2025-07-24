@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axiosClient from "~/conf/axiosClient";
 import { Link } from "react-router-dom";
 import {
   FaCalendarCheck,
@@ -6,42 +7,34 @@ import {
   FaHeadphones,
   FaCalendarAlt,
   FaThumbsUp,
+  FaFileAlt,
+  FaCreditCard,
 } from "react-icons/fa";
 
 type Reservation = {
   id: string;
+  userId: number;
   date: string;
+  heure: string;
+  dureeHeure: number;
   materiel: string[];
   lieu: string;
-  statut: "En attente" | "Confirmée";
+  statut: "en_attente" | "confirmée";
+  prixEstime: number;
+  prixFinal?: number;
+  etatCommande: string;
 };
 
-const mockData: Reservation[] = [
-  {
-    id: "1",
-    date: "2025-08-14",
-    materiel: [
-      "Pack DJ + Éclairage",
-      "Deejay",
-      "Enceinte",
-      "Projecteur",
-      "Micros",
-      "Câbles",
-      "Table de mixage",
-    ],
-    lieu: "Paris",
-    statut: "En attente",
-  },
-  {
-    id: "2",
-    date: "2025-09-05",
-    materiel: ["Pack Sono + Micro"],
-    lieu: "Lyon",
-    statut: "Confirmée",
-  },
-];
-
 export default function EspaceClient(): JSX.Element {
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+
+  useEffect(() => {
+    axiosClient
+      .get("/api/user/reservations", { withCredentials: true })
+      .then((resp) => setReservations(resp.data))
+      .catch(console.error);
+  }, []);
+
   const joinAndTruncate = (items: string[]) => {
     const joined = items.join(", ");
     const words = joined.split(" ");
@@ -49,36 +42,37 @@ export default function EspaceClient(): JSX.Element {
   };
 
   const getReservationIcon = (statut: string) => {
-    if (statut === "Confirmée") return <FaCalendarCheck color="green" />;
-    if (statut === "En attente") return <FaCalendarAlt color="#f59e0b" />;
-    return <FaCalendarAlt />;
+    if (statut === "confirmée") return <FaCalendarCheck color="green" />;
+    return <FaCalendarAlt color="#f59e0b" />;
   };
 
-  const hasReservations = mockData.length > 0;
+  const hasReservations = reservations.length > 0;
 
   return (
     <div className="text-[#575756]">
       <title>Espace Client | Blit Sono</title>
+
       <section className="bgImageReservation">
         <div
           className="bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
-         text-white py-10 w-full flex flex-col pl-30"
+          text-white py-10 w-full flex flex-col pl-30"
         >
           <h1 className="text-3xl font-extrabold mb-4 flex gap-1 w-[800px] items-center">
             <FaCalendarCheck className="text-7xl text-[#18769C]" />
             Mes Réservations
           </h1>
           <p className="w-[500px] text-lg italic mb-6 text-start flex items-center border-l-4 border-[#18769C] pl-4">
-            Avec BlitSono, réservez simplement le matériel qu'il vous faut en
+            Avec BlitSono, réservez simplement le matériel qu’il vous faut en
             quelques clics ! Découvrez nos packs professionnels adaptés à tous
-            types d'événements, du matériel audio et lumière fiable et de
-            qualité - garantissant une installation rapide et un accompagnement
-            expert. Votre événement mérite le meilleur, réservez avec confiance.
+            types d’événements, du matériel audio et lumière fiable et de
+            qualité. Votre événement mérite le meilleur, réservez avec
+            confiance.
           </p>
           <div className="space-x-4">
             <Link
               to="/catalogues"
-              className="inline-flex items-center gap-2 bg-white text-[#18769C] font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition"
+              className="inline-flex items-center gap-2 bg-white text-[#18769C]
+                font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition"
             >
               <FaHeadphones /> Explorer notre catalogue
             </Link>
@@ -86,7 +80,8 @@ export default function EspaceClient(): JSX.Element {
               to="https://www.facebook.com/blit.sono"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#145e7a] text-white px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
+              className="inline-flex items-center gap-2 bg-[#145e7a] text-white
+                px-6 py-3 rounded-lg hover:bg-[#0f4a63] transition"
             >
               <FaPhone /> Contactez-nous sur MP
             </Link>
@@ -112,10 +107,20 @@ export default function EspaceClient(): JSX.Element {
             </Link>
           </div>
         ) : (
-          <table className="w-full table-auto bg-white rounded shadow ">
+          <table className="w-full table-auto bg-white rounded shadow">
             <thead className="bg-gray-100">
               <tr>
-                {["Date", "Matériel", "Lieu", "Statut", "Actions"].map((h) => (
+                {[
+                  "Date",
+                  "Heure",
+                  "Durée",
+                  "Matériel",
+                  "Lieu",
+                  "Statut",
+                  "Prix est.",
+                  "Prix final",
+                  "Actions",
+                ].map((h) => (
                   <th key={h} className="p-3 text-center text-xl">
                     {h}
                   </th>
@@ -123,14 +128,18 @@ export default function EspaceClient(): JSX.Element {
               </tr>
             </thead>
             <tbody>
-              {mockData.map((r) => (
+              {reservations.map((r) => (
                 <tr key={r.id} className="even:bg-gray-50 text-center">
                   <td className="p-3">{r.date}</td>
-                  <td className="p-3">{joinAndTruncate(r.materiel)}</td>
+                  <td className="p-3">{r.heure}</td>
+                  <td className="p-3">{r.dureeHeure} h</td>
+                  <td className="p-3 w-[300px]">
+                    {joinAndTruncate(r.materiel)}
+                  </td>
                   <td className="p-3">{r.lieu}</td>
                   <td
-                    className={`p-3 font-semibold flex flex-row items-center ${
-                      r.statut === "Confirmée"
+                    className={`p-3 font-semibold ${
+                      r.statut === "confirmée"
                         ? "text-green-600"
                         : "text-yellow-600"
                     }`}
@@ -138,18 +147,31 @@ export default function EspaceClient(): JSX.Element {
                     {getReservationIcon(r.statut)}
                     <span className="ml-2">{r.statut}</span>
                   </td>
-                  <td className="p-3 space-x-2">
+                  <td className="p-3">{r.prixEstime.toLocaleString()} Ar</td>
+                  <td className="p-3">
+                    {r.prixFinal ? `${r.prixFinal.toLocaleString()} Ar` : "—"}
+                  </td>
+                  <td className="p-3 space-x-2 flex justify-center">
                     <Link
                       to={`/devis/${r.id}`}
-                      className="px-3 py-1 text-white rounded bg-[#18769C] hover:bg-[#0f5a70]"
+                      className="p-2 text-white rounded bg-[#18769C] hover:bg-[#0f5a70]"
+                      title="Voir Devis"
                     >
-                      Voir Devis
+                      <FaCalendarAlt size={20} />
                     </Link>
                     <Link
                       to={`/facture/${r.id}`}
-                      className="px-3 py-1 text-white rounded bg-[#18769C] hover:bg-[#0f5a70]"
+                      className="p-2 text-white rounded bg-[#18769C] hover:bg-[#0f5a70]"
+                      title="Voir Facture"
                     >
-                      Voir Facture
+                      <FaFileAlt size={20} />
+                    </Link>
+                    <Link
+                      to={`/paiement/${r.id}`}
+                      className="p-2 text-white rounded bg-[#18769C] hover:bg-[#0f5a70]"
+                      title="Voir Paiement"
+                    >
+                      <FaCreditCard size={20} />
                     </Link>
                   </td>
                 </tr>
@@ -167,9 +189,7 @@ export default function EspaceClient(): JSX.Element {
           <p className="w-[500px] text-lg italic mb-6 text-start flex items-center border-l-4 border-[#18769C] pl-4">
             Nous sommes ravis de vous accompagner dans la réussite de votre
             événement avec du matériel audio et lumière professionnel, fiable et
-            de qualité. En réservant chez nous, vous bénéficiez d'une
-            installation rapide, d'un service expert et d'une tranquillité
-            d'esprit totale. À bientôt !
+            de qualité...
           </p>
         </div>
       )}

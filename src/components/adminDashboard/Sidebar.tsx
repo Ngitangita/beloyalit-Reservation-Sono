@@ -1,9 +1,11 @@
-
 import { useState, type JSX } from "react";
 import {
   MdOutlineHome,
   MdOutlineLogin,
   MdMenu,
+  MdLibraryBooks,
+  MdCategory,
+  MdAdminPanelSettings
 } from "react-icons/md";
 import { RiCloseLine } from "react-icons/ri";
 import { FaAngleRight } from "react-icons/fa";
@@ -12,15 +14,28 @@ import { useAuthStore } from "~/stores/useAuthStore.js";
 import type { MenuItem } from "~/types/types.js";
 
 const menuItems: MenuItem[] = [
-  { title: "Accueil", icon: <MdOutlineHome />, path: "/admin", subItems: [] },
-   {
-    title: "Catalogues",
-    path: "/admin/catalogues",
+  {
+    title: "Accueil",
+    icon: <MdOutlineHome />,
+    path: "/admin",
     subItems: [],
   },
   {
-    title: "Categories",
-    path: "/admin/categories",
+    title: "Admin Catalogues",
+    icon: <MdLibraryBooks />,
+    path: "/admin/admin-catalogues",
+    subItems: [],
+  },
+  {
+    title: "Admin Category",
+    icon: <MdCategory />,
+    path: "/admin/admin-category",
+    subItems: [],
+  },
+  {
+    title: "Admin Reservations",
+    icon: <MdAdminPanelSettings size={24} />, 
+    path: "/admin/admin-reservations",
     subItems: [],
   },
 ];
@@ -56,33 +71,32 @@ export default function Sidebar(): JSX.Element {
           <MdMenu className="text-gray-500" />
         )}
       </button>
-
-      <div className="bg-gray-800 h-screen w-64 flex justify-between flex-col p-4 pt-0">
-        <div
-          className={`
-          fixed inset-y-0 left-0 text-white flex flex-col p-4
+      <div
+        className={`
+          fixed inset-y-0 left-0 text-white flex flex-col p-4 pt-7
           transform transition-transform duration-300 ease-in-out
+          bg-gray-800 h-screen w-64 
           ${openSidebar ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0 lg:relative lg:block
         `}
-        >
-         <div className="flex flex-col items-center gap-2">
-          <img
-            src="/logo-blit.png"
-            alt="Logo BlitSono"
-            className="w-24 h-24 object-cover rounded-full"
-          />
-          <div className="text-center font-bold text-3xl leading-none flex flex-col italic font-serif">
-            <span className="inline-block animate-revealText">
-              beloya<span className="text-[#18769C]">lit </span>
-            </span>
-            <span className="text-xl inline-flex items-center justify-end gap-1 text-[#18769C]">
-              <span className="block w-5 h-1 bg-white"></span>.com
-            </span>
+      >
+          <div className="flex flex-col items-center gap-2">
+            <img
+              src="/logo-blit.png"
+              alt="Logo BlitSono"
+              className="w-24 h-24 object-cover rounded-full"
+            />
+            <div className="text-center font-bold text-3xl leading-none flex flex-col italic font-serif">
+              <span className="inline-block animate-revealText">
+                beloya<span className="text-[#18769C]">lit </span>
+              </span>
+              <span className="text-xl inline-flex items-center justify-end gap-1 text-[#18769C]">
+                <span className="block w-5 h-1 bg-white"></span>.com
+              </span>
+            </div>
           </div>
-        </div>
 
-          <ul className="space-y-2 flex-1 overflow-y-auto">
+          <ul className="space-y-2 flex-1 overflow-y-auto mt-10">
             {menuItems.map((item, i) => (
               <li key={i}>
                 {item.subItems.length > 0 ? (
@@ -134,11 +148,10 @@ export default function Sidebar(): JSX.Element {
               </li>
             ))}
           </ul>
-        </div>
         <button
           onClick={handleLogout}
-          className="mt-4 flex items-center text-amber-50 p-2 rounded-lg bg-gray-700
-           hover:bg-gray-600 cursor-pointer"
+          className=" flex items-center text-amber-50 p-2 rounded-lg bg-gray-700
+           hover:bg-gray-600 cursor-pointer mt-10"
         >
           <MdOutlineLogin className="mr-2" />
           Se déconnecter

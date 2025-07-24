@@ -412,7 +412,7 @@ const allPackItems: PackItemsType[] = [
   },
 ];
 
-export default function ReservationPacks() {
+export default function PackMateriels() {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q")?.toLowerCase() || "";
   const [selectedCats, setSelectedCats] = useState<string[]>([]);

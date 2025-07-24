@@ -12,14 +12,18 @@ function AuthAdmin({ children }: AuthAdminProps) {
   const user = useAuthStore.use.user();
   const isAuthenticated = useAuthStore.use.isAuthenticated();
 
-  if (isAuthenticated) {
-    return children?.(user) ?? null;
+  if (!isAuthenticated) {
+    return <Navigate to="/sign-in" replace />;
   }
-  return <Navigate to="/sign-in" replace />;
+
+  return <>{children?.(user)}</>;
 }
 
 const routes = {
   "/admin": "Admin Dashboard",
+  "/admin/categories": "Gestion des catégories",
+  "/admin/catalogues": "Gestion des catalogues",
+  "/admin/admin-reservations": "Gestion des réservations"
 } as const;
 
 function ProtectedLayout() {
@@ -29,18 +33,26 @@ function ProtectedLayout() {
   return (
     <AuthAdmin>
       {(user) => (
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar/>
-          <div className="flex flex-col flex-1 overflow-y-auto">
-            <header className="bg-white shadow px-4 py-3 flex justify-between items-center">
-              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
-              <div className="text-sm text-gray-500">{user?.email ?? "no-email@example.com"}</div>
-            </header>
-            <main className="flex-1 p-4 bg-gray-100">
-              <Outlet />
-            </main>
+        <>
+          <title>{title} • Mon App</title>
+
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+
+            <div className="flex flex-col flex-1 overflow-y-auto">
+              <header className="bg-white shadow px-4 py-3 flex justify-between items-center">
+                <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+                <div className="text-sm text-gray-500">
+                  {user?.email ?? "no-email@example.com"}
+                </div>
+              </header>
+
+              <main className="flex-1 p-4 bg-gray-100">
+                <Outlet />
+              </main>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </AuthAdmin>
   );

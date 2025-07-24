@@ -82,7 +82,9 @@ const Footer: React.FC = () => {
             href="https://www.facebook.com/blit.sono"
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-block px-4 py-2 bg-[#18769C] hover:bg-[#0f5a70] text-white font-medium rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#18769C]/50"
+            className="inline-block px-4 py-2 bg-[#18769C] hover:bg-[#0f5a70] text-white 
+            font-medium rounded transition-colors duration-200 focus:outline-none 
+            focus:ring-2 focus:ring-[#18769C]/50 cursor-pointer"
           >
             Contactez-nous sur MP
           </a>

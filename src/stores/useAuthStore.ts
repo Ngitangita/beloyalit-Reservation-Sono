@@ -7,7 +7,7 @@ const authStore = create(
   persist(
     combine(
       {
-        isAuthenticated: false, 
+        isAuthenticated: true, 
         token: null as string | null,
         user: null as Admin | Client | null
       },

@@ -14,7 +14,7 @@ type MenuItem = {
 const menuItems: MenuItem[] = [
   { title: "Accueil", path: "/" },
   { title: "Catalogue", path: "/catalogues" },
-  { title: "Réservation de packs", path: "/reservation-pack" },
+  { title: "Matériel packs", path: "/pack-materiels" },
   { title: "Espace client", path: "/client" },
 ];
 

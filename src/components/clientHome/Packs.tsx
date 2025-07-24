@@ -8,7 +8,7 @@ type Props = {
   autoScrollIntervalMs?: number;
 };
 
-export default function MaterielsPack({
+export default function Packs({
   materiels,
   autoScrollIntervalMs = 5000,
 }: Props) {

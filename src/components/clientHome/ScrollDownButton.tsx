@@ -32,7 +32,7 @@ const ScrollDownButton: React.FC<ScrollDownButtonProps> = ({
       type="button"
     >
       <FaHeadphones />
-      Explorer notre pack
+      Explorer notre catalogues
     </button>
   );
 };

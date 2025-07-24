@@ -49,8 +49,7 @@ export type MaterielsType =  Pick<MaterielType, "id" | "nom" | "image_url">;
 export type Category = {
   id: number;
   name: string;
-  createdAt: string;
-  updatedAt: string;
 }
+
 
 

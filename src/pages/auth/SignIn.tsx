@@ -8,55 +8,38 @@ import { useApiAuth } from "~/hooks/useApiAuth";
 import { execute } from "~/utils/execute";
 import { useAuthStore } from "~/stores/useAuthStore";
 
-const schema = yup
-  .object({
-    email: yup
-      .string()
-      .email("Adresse email invalide")
-      .required("L’email est obligatoire"),
-    password: yup.string().required("Le mot de passe est obligatoire"),
-  })
-  .required();
+const schema = yup.object({
+  email: yup.string().email("Adresse email invalide").required("L'email est obligatoire"),
+  mot_de_passe: yup.string().required("Le mot de passe est obligatoire"),
+}).required();
 
 export const SignIn = () => {
   const setIsAuthenticated = useAuthStore.use.setIsAuthenticated();
-  // const  setToken = useAuthStore.use.setToken()
-  // const setType = useAuthStore.use.setType();
-  // const setUser = useAuthStore.use.setUser()
+  const setToken = useAuthStore.use.setToken();
+  const setUser = useAuthStore.use.setUser();
 
   const [pending, startTransition] = useTransition();
-  const { signin } = useApiAuth();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginValues>({
+  const { signin } = useApiAuth<{ token: string; user: import("~/types/types").UserType }>();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data: LoginValues) => {
-    startTransition(async () => {
+    startTransition(() => {
       execute(
-        async () => {
-          return await signin(data.email, data.password);
-        },
+        () => signin({ email: data.email, mot_de_passe: data.mot_de_passe }),
         {
-          onSuccess: (data) => {
-            setToken(data.token);
-            setUser({
-              email: data.email,
-              firstName: data.firstName,
-              role: data.role,
-            });
+          onSuccess: res => {
+            setToken(res.token);
+            setUser(res.user);
             setIsAuthenticated(true);
           },
-          onError: (error) => {
+          onError: err => {
             setIsAuthenticated(false);
             setToken(null);
             setUser(null);
-            setIsAuthenticated(false);
-            console.error("Erreur de connexion", error);
-          },
+            console.error("Erreur de connexion", err);
+          }
         }
       );
     });
@@ -64,86 +47,48 @@ export const SignIn = () => {
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center bg-[#FFFFFF] p-5 text-[#575756]">
-      <title>Se connecter </title>
+      <title>Se connecter</title>
       <h1 className="font-semibold font-open-sans text-[32px]">Mon Compte</h1>
-      <div className="w-full  flex justify-center items-center">
+      <div className="w-full flex justify-center items-center">
         <div className="flex flex-col items-center gap-12 relative bottom-5">
-          <h2 className="text-center font-semibold font-open-sans text-[20px]">
-            Nouveau client ?</h2>
+          <h2 className="text-center font-semibold font-open-sans text-[20px]">Nouveau client ?</h2>
           <p className="text-start max-w-[500px] text-[#18769C]">
             En créant votre compte sur beloyalit.com, vous gagnerez du temps
             lors de vos prochaines réservations de sonorisation, accéderez à
             l'ensemble des services de votre espace personnel et profiterez de
             nos diverses offres promotionnelles
           </p>
-           <Link to="/sign-up">
-          <button
-              type="submit"
-              disabled={isSubmitting || pending}
-              className="w-[400px] sm:w-[500px] p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#18769C]/20 hover:to-[#18769C] mt-4 cursor-pointer
-              bg-gradient-to-r from-[#18769C]/20 to-[#18769C] text-xl text-white"
-            >
-              {pending ? (
-                <span className="animate-pulse">Chargement...</span>
-              ) : (
-                "Je créer mon compte"
-              )}
+          <Link to="/sign-up">
+            <button type="submit" disabled={isSubmitting || pending} className="w-[400px] sm:w-[500px] p-2 rounded hover:bg-gradient-to-l hover:from-[#18769C]/20 hover:to-[#18769C] mt-4 cursor-pointer bg-gradient-to-r from-[#18769C]/20 to-[#18769C] text-xl text-white">
+              {pending ? <span className="animate-pulse">Chargement...</span> : "Je créer mon compte"}
             </button>
-                </Link>
+          </Link>
         </div>
         <div className="max-w-[600px] flex flex-col justify-center items-center">
-          <div className="text-center">
-            <h2 className="font-semibold font-open-sans text-[20px]">
-              J'ai déjà un compte
-            </h2>
-          </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            className="max-w-[600px] p-6 flex flex-col justify-around items-center "
-          >
-            {["email", "password"].map((name) => (
+          <h2 className="font-semibold font-open-sans text-[20px]">J'ai déjà un compte</h2>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="max-w-[600px] p-6 flex flex-col justify-around items-center">
+            {["email", "mot_de_passe"].map(name => (
               <div className="mb-4" key={name}>
-                <label htmlFor={name} className="block mb-1 font-medium ">
+                <label htmlFor={name} className="block mb-1 font-medium">
                   {name === "email" ? "Adresse e-mail" : "Mot de passe"}
                 </label>
                 <input
                   id={name}
                   {...register(name as keyof LoginValues)}
-                  type={name === "password" ? "password" : "email"}
+                  type={name === "mot_de_passe" ? "password" : "email"}
                   placeholder={name === "email" ? "Email" : "Mot de passe"}
-                  className={`p-2 pr-10 w-[400px] sm:w-[500px] border rounded outline-[#18769C] ${
-                    errors[name as keyof LoginValues]
-                      ? "border-red-500"
-                      : "border-[#18769C]/50"
-                  }`}
+                  className={`p-2 pr-10 w-[400px] sm:w-[500px] border rounded outline-[#18769C] ${errors[name as keyof LoginValues] ? "border-red-500" : "border-[#18769C]/50"}`}
                 />
                 {errors[name as keyof LoginValues] && (
-                  <p className="text-red-500 text-sm">
-                    {errors[name as keyof LoginValues]?.message}
-                  </p>
+                  <p className="text-red-500 text-sm">{errors[name as keyof LoginValues]?.message}</p>
                 )}
               </div>
             ))}
-            <button
-              type="submit"
-              disabled={isSubmitting || pending}
-              className="w-[400px] sm:w-[500px] p-2 rounded
-             hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 mt-4 cursor-pointer
-              bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white"
-            >
-              {pending ? (
-                <span className="animate-pulse">Chargement...</span>
-              ) : (
-                "Se connecter"
-              )}
+            <button type="submit" disabled={isSubmitting || pending} className="w-[400px] sm:w-[500px] p-2 rounded hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 mt-4 cursor-pointer bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white">
+              {pending ? <span className="animate-pulse">Chargement...</span> : "Se connecter"}
             </button>
-
             <p className="w-full flex flex-row justify-between">
-              <span className="text-[#50a9f2] underline">
-                <Link to="#">Mot de passe oublié ?</Link>
-              </span>
+              <span className="text-[#50a9f2] underline"><Link to="#">Mot de passe oublié ?</Link></span>
             </p>
           </form>
         </div>

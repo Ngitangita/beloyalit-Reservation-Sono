@@ -436,7 +436,8 @@ export default function PackDetail() {
 
       <section className="p-6">
         <div className="flex justify-end gap-4 mb-4">
-          <Link to="/reservation-pack" className="text-[#18769C] hover:underline text-lg">← Retour aux packs</Link>
+          <Link to="/pack-materiels" className="text-[#18769C] hover:underline text-lg">
+          ← Retour aux packs</Link>
           <button
             onClick={handleAdd}
             className={`px-6 py-3 rounded text-white transition duration-200 ${
@@ -447,7 +448,6 @@ export default function PackDetail() {
           </button>
         </div>
 
-        {/* Ici, plus de slider, uniquement le tableau */}
         <table className="w-full table-auto">
           <thead className="bg-gray-100">
             <tr>
