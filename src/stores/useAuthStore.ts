@@ -7,9 +7,9 @@ const authStore = create(
   persist(
     combine(
       {
-        isAuthenticated: true, 
+        isAuthenticated: false,
         token: null as string | null,
-        user: null as Admin | Client | null
+        user: null as Admin | Client | null,
       },
       (set) => ({
         setToken: (token: string) => set({ token }),
@@ -26,4 +26,4 @@ const authStore = create(
   )
 );
 
-export const useAuthStore = createSelectors(authStore)
+export const useAuthStore = createSelectors(authStore);

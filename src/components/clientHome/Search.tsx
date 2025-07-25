@@ -23,7 +23,7 @@ export default function Search(): JSX.Element {
   };
 
   return (
-    <form onSubmit={onSubmit} className="w-[300px]">
+    <form onSubmit={onSubmit} className="w-full">
       <input
         type="text"
         value={q}

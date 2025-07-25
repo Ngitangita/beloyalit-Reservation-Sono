@@ -1,20 +1,16 @@
-// export type UserRole = "ADMIN" | "CLIENT";
+export type FormValues = {
+  prenom: string;
+  nom: string;
+  telephone: string;
+  email: string;
+  mot_de_passe: string;
+  confirm: string; 
+};
 
-// type BaseUser = {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   password: string;
-//   role : UserRole;
-//   registrationDate?: string;
-// };
-
-// export type Client = BaseUser & {
-//   phone?: string | null;
-// };
-
-// export type Admin = BaseUser;
+export type LoginValues = {
+  email: string;
+  mot_de_passe: string;
+};
 
 export type UserType = {
   nom: string;
@@ -22,7 +18,7 @@ export type UserType = {
   email: string;
   mot_de_passe: string;
   telephone?: string;
-  role_id: number;
+  role: string;
   date_inscription: string;
 };
 
@@ -31,17 +27,12 @@ export type SigninResponse = {
   user: UserType;
 };
 
-export type FormValues = {
-  prenom: string;
+export type SignupParams = {
   nom: string;
-  telephone: string;
-  date_inscription: string;
+  prenom: string;
   email: string;
   mot_de_passe: string;
-  confirm: string;
-};
-
-export type LoginValues = {
-  email: string;
-  mot_de_passe: string;
+  mot_de_passe_confirmation: string;
+  telephone?: string;
+  role: string;
 };

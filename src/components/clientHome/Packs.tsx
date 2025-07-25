@@ -60,37 +60,38 @@ export default function Packs({
   }, [autoScrollIntervalMs, scroll, scrollBy]);
 
   return (
-    <div className="flex flex-col">
-      <div className="text-[#18769C] w-full flex flex-col gap-4 pl-30 pt-10 pr-30">
+    <div className="px-8">
+      <div className="text-[#18769C] w-full flex flex-col gap-4 pt-10">
         <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-3">
           <FaThumbsUp size={24} /> Nos packs sur mesure
         </h1>
-        <p className=" text-lg text-start text-[#575756] flex items-center border-l-4 border-[#18769C] pl-4">
-          Explorez nos différents packs thématiques :
-          sonorisation, éclairage, DJ, studio, etc. Chaque pack est
-          soigneusement pensé pour répondre à des besoins précis. Que vous soyez
-          organisateur d'événement, artiste ou amateur passionné, vous trouverez
-          ici des solutions prêtes à l'emploi.
+        <p className="text-base sm:text-lg lg:text-xl text-[#575756] flex items-center border-l-4 border-[#18769C] pl-4">
+          Explorez nos différents packs thématiques : sonorisation, éclairage,
+          DJ, studio, etc. Chaque pack est soigneusement pensé pour répondre à
+          des besoins précis. Que vous soyez organisateur d'événement, artiste
+          ou amateur passionné, vous trouverez ici des solutions prêtes à
+          l'emploi.
         </p>
-        <p className=' italic'>
-           <FaHandPointRight size={24} className="inline mr-2 text-[#1E2939]" /> Visitez les fiches de chaque
-          pack pour découvrir les détails, les équipements inclus, et choisir
-          celui qui correspond le mieux à votre projet.
+        <p className="italic text-sm sm:text-base">
+          <FaHandPointRight size={20} className="inline mr-2 text-[#1E2939]" />{" "}
+          Visitez les fiches de chaque pack pour découvrir les détails, les
+          équipements inclus, et choisir celui qui correspond le mieux à votre
+          projet.
         </p>
       </div>
-      <div className="relative flex items-center border-b border-gray-300 pl-7 pr-6 pt-5">
+      <div className="relative flex items-center border-b border-gray-300 pt-5 pb-5">
         <div
           id="carousel"
           ref={carouselRef}
-          className="overflow-x-auto whitespace-nowrap scroll-smooth pt-4 pb-4"
+          className="overflow-x-auto whitespace-nowrap scroll-smooth pl-2 pr-2 sm:pl-6 sm:pr-6"
         >
           {materiels.map((m) => (
             <Link
               key={m.id}
-                to={`/pack-detail/${m.id}`}
-              className="inline-block w-64 mx-2"
+              to={`/pack-detail/${m.id}`}
+              className="inline-block w-64 sm:w-56 md:w-64 lg:w-72 xl:w-80 mx-2"
             >
-              <div className="rounded-lg p-4 shadow-md hover:scale-110 transition duration-300 ease-in-out bg-white hover:shadow-lg group">
+              <div className="rounded-lg p-4 shadow-md hover:scale-105 transition duration-300 ease-in-out bg-white hover:shadow-lg group">
                 <p className="text-sm text-gray-600 line-clamp-2 group-hover:text-[#18769C] truncate">
                   {m.description}
                 </p>
@@ -104,21 +105,27 @@ export default function Packs({
             </Link>
           ))}
         </div>
+
         <button
           onClick={() => scroll("prev")}
           disabled={atStart}
-          className={`absolute cursor-pointer left-1 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
-            atStart ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`
+        absolute left-0 top-1/2 transform -translate-y-1/2 text-4xl sm:text-5xl p-1 sm:p-2 btn btn-circle text-[#18769C]/50 bg-[#F3F4F6]
+        hover:bg-[#1E2939] hover:text-[#18769C]
+        ${atStart ? "opacity-50 cursor-not-allowed" : ""}
+      `}
         >
           ‹
         </button>
+
         <button
           onClick={() => scroll("next")}
           disabled={atEnd}
-          className={`absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-7xl px-2 btn btn-circle btn-sm text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] ${
-            atEnd ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`
+        absolute right-0 top-1/2 transform -translate-y-1/2 text-4xl sm:text-5xl p-1 sm:p-2 btn btn-circle text-[#18769C]/50 bg-[#F3F4F6]
+        hover:bg-[#1E2939] hover:text-[#18769C]
+        ${atEnd ? "opacity-50 cursor-not-allowed" : ""}
+      `}
         >
           ›
         </button>
