@@ -22,15 +22,12 @@ import Facture from "~/pages/client/Facture";
 import Paiement from "~/pages/client/Paiement";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { ProtectedRoute } from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-      <ProtectedRoute allowedRoles={["admin"]}>
         <ProtectedLayout />
-      </ProtectedRoute>
     ),
     children: [
       { index: true, element: <AdminDashboard /> },

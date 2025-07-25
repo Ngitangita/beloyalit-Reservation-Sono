@@ -15,7 +15,7 @@ type ReservationSummary = {
   statut: "en_attente" | "validee" | "refusee";
 };
 
-export default function AdminDashboard(): JSX.Element {
+export default function AdminDashboard() {
   const [reservations, setReservations] = useState<ReservationSummary[]>([]);
   const [processing, setProcessing] = useState<number | null>(null);
   const [filter, setFilter] = useState({
@@ -26,12 +26,12 @@ export default function AdminDashboard(): JSX.Element {
   });
 
   useEffect(() => {
-  axiosClient.get("/api/admin/reservations", { withCredentials: true })
-    .then(({ data }) => {
-      const list = Array.isArray(data) ? data : data.reservations || [];
-      setReservations(list);
-    });
-}, []);
+    axiosClient.get("/api/admin/reservations", { withCredentials: true })
+      .then(({ data }) => {
+        const list = Array.isArray(data) ? data : data.reservations || [];
+        setReservations(list);
+      });
+  }, []);
 
   const updateStatus = (id: number, newStatus: ReservationSummary["statut"]) => {
     setProcessing(id);
@@ -45,16 +45,14 @@ export default function AdminDashboard(): JSX.Element {
       .finally(() => setProcessing(null));
   };
 
-  const filtered = useMemo(
-    () =>
-      reservations.filter(r =>
-        (!filter.client || r.user_name.toLowerCase().includes(filter.client.toLowerCase())) &&
-        (!filter.dateHeure || `${r.date_evenement} ${r.heure_evenement}`.includes(filter.dateHeure)) &&
-        (!filter.lieu || r.lieu.toLowerCase().includes(filter.lieu.toLowerCase())) &&
-        (!filter.statut || r.statut === filter.statut)
-      ),
-    [reservations, filter]
-  );
+  const filtered = useMemo(() => {
+    return reservations.filter(r =>
+      (!filter.client || r.user_name.toLowerCase().includes(filter.client.toLowerCase())) &&
+      (!filter.dateHeure || `${r.date_evenement} ${r.heure_evenement}`.includes(filter.dateHeure)) &&
+      (!filter.lieu || r.lieu.toLowerCase().includes(filter.lieu.toLowerCase())) &&
+      (!filter.statut || r.statut === filter.statut)
+    );
+  }, [reservations, filter]);
 
   const commonSX = {
     width: "200px",
@@ -84,7 +82,8 @@ export default function AdminDashboard(): JSX.Element {
           onChange={e => setFilter(f => ({ ...f, lieu: e.target.value }))}
           variant="outlined" size="small" sx={commonSX} />
         <TextField label="Statut" select SelectProps={{ native: true }}
-          value={filter.statut} onChange={e => setFilter(f => ({ ...f, statut: e.target.value }))}
+          value={filter.statut}
+          onChange={e => setFilter(f => ({ ...f, statut: e.target.value }))}
           variant="outlined" size="small" sx={commonSX}>
           <option value="">Tous statuts</option>
           <option value="en_attente">En attente</option>
@@ -96,7 +95,7 @@ export default function AdminDashboard(): JSX.Element {
       <table className="w-full table-auto bg-white shadow rounded">
         <thead className="bg-gray-100">
           <tr>
-            {["Client","Matériel","Date/Heure","Durée","Lieu","Statut","Actions"].map(h =>
+            {["Client", "Matériel", "Date/Heure", "Durée", "Lieu", "Statut", "Actions"].map(h =>
               <th key={h} className="p-2 text-left">{h}</th>
             )}
           </tr>
@@ -118,30 +117,38 @@ export default function AdminDashboard(): JSX.Element {
               <td className="p-2 flex space-x-2">
                 {res.statut === "en_attente" && (
                   <>
-                    <button disabled={processing === res.id}
+                    <button
+                      disabled={processing === res.id}
                       onClick={() => updateStatus(res.id, "validee")}
                       className="p-2 bg-green-600 text-white rounded hover:bg-green-700"
-                      title="Valider">
+                      title="Valider"
+                    >
                       <FaCheck />
                     </button>
-                    <button disabled={processing === res.id}
+                    <button
+                      disabled={processing === res.id}
                       onClick={() => updateStatus(res.id, "refusee")}
                       className="p-2 bg-red-600 text-white rounded hover:bg-red-700"
-                      title="Refuser">
+                      title="Refuser"
+                    >
                       <FaTimes />
                     </button>
                   </>
                 )}
-                <Link to={`/admin/admin-reservations-detail/${res.id}`}
+                <Link
+                  to={`/admin/admin-reservations-detail/${res.id}`}
                   className="p-2 bg-[#18769C] text-white rounded hover:bg-[#0f5a70]"
-                  title="Voir détail">
+                  title="Voir détail"
+                >
                   <FaInfoCircle />
                 </Link>
               </td>
             </tr>
           )) : (
             <tr>
-              <td colSpan={7} className="p-4 text-center text-gray-500">Aucune réservation trouvée.</td>
+              <td colSpan={7} className="p-4 text-center text-gray-500">
+                Aucune réservation trouvée.
+              </td>
             </tr>
           )}
         </tbody>
