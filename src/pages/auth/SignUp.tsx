@@ -10,10 +10,12 @@ import { execute } from "~/utils/execute";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { Loading } from "~/components/Loading";
 
+
 const schema = yup.object({
   prenom: yup.string().required("Le prénom est obligatoire"),
   nom: yup.string().required("Le nom est obligatoire"),
-  telephone: yup.string()
+  telephone: yup
+    .string()
     .matches(/^[0-9\- ]*$/, "Le téléphone ne doit contenir que des chiffres, espaces ou tirets")
     .required("Le téléphone est obligatoire"),
   email: yup.string().email("Adresse email invalide").required("L'email est obligatoire"),
@@ -22,8 +24,8 @@ const schema = yup.object({
 });
 
 export const SignUp = () => {
-  const { signup } = useApiAuth();
   const navigate = useNavigate();
+  const { signup } = useApiAuth();
   const [pending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -38,7 +40,37 @@ export const SignUp = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<FormValues> = data => {
+  const fields: (keyof FormValues)[] = [
+    "nom",
+    "prenom",
+    "telephone",
+    "email",
+    "mot_de_passe",
+    "confirm",
+  ];
+
+  const labels: Record<keyof FormValues, string> = {
+    nom: "Nom",
+    prenom: "Prénom",
+    telephone: "Téléphone",
+    email: "Email",
+    mot_de_passe: "Mot de passe",
+    confirm: "Confirmer le mot de passe",
+  };
+
+  const getInputType = (field: string): string => {
+    if (field === "mot_de_passe") return showPassword ? "text" : "password";
+    if (field === "confirm") return showConfirm ? "text" : "password";
+    if (field === "email") return "email";
+    return "text";
+  };
+
+  const toggleVisibility = (field: string) => {
+    if (field === "mot_de_passe") setShowPassword((prev) => !prev);
+    if (field === "confirm") setShowConfirm((prev) => !prev);
+  };
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     startTransition(() => {
       execute(
         () =>
@@ -51,91 +83,98 @@ export const SignUp = () => {
             telephone: data.telephone,
           }),
         {
-          onSuccess: res => {
+          onSuccess: (res) => {
             setToken(res.token);
             setUser(res.user);
             setIsAuthenticated(true);
-            const role = res.user.role;
-            navigate(role === "user" ? "/" : "/admin", { replace: true });
+            navigate(res.user.role === "user" ? "/" : "/admin", { replace: true });
           },
-          onError: err => console.error("Erreur d'inscription :", err),
+          onError: (err) => console.error("Erreur d'inscription :", err),
         }
       );
     });
   };
 
-  const fields: (keyof FormValues)[] = ["nom", "prenom", "telephone", "email", "mot_de_passe", "confirm"];
-
   return (
     <>
       {pending && <Loading />}
-      <div className="flex flex-col gap-4 items-center justify-center bg-[#FFFFFF] p-5 text-[#575756]">
+    <div className="flex flex-col sm:flex-col gap-4 items-center
+     justify-center bg-[#FFFFFF] p-4 pt-18 text-[#575756] w-full">
+
         <title>S'inscrire</title>
-        <div className="text-center">
-          <h1 className="font-semibold font-open-sans text-[32px]">Je crée mon compte</h1>
-        </div>
-        <div className="overflow-hidden w-[1250px] flex flex-col justify-start items-start z-50 pl-10 pr-10">
-          <h1 className="font-semibold text-[20px]">Identification</h1>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="h-auto p-6 flex flex-row flex-wrap gap-4 justify-between items-center">
-            {fields.map(field => {
+
+        <h1 className="text-center font-semibold font-open-sans text-[32px]">Je crée mon compte</h1>
+
+        <div className="overflow-hidden w-full max-w-screen-xl px-4 sm:px-10">
+          <h2 className="font-semibold text-[20px] mb-4">Identification</h2>
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="flex flex-wrap gap-6 justify-between"
+          >
+            {fields.map((field) => {
               const error = errors[field];
-              const isPwd = field === "mot_de_passe";
-              const isConf = field === "confirm";
-              const type = isPwd
-                ? showPassword ? "text" : "password"
-                : isConf
-                ? showConfirm ? "text" : "password"
-                : field === "email"
-                ? "email"
-                : "text";
-              const label = {
-                nom: "Nom",
-                prenom: "Prénom",
-                telephone: "Téléphone",
-                email: "Email",
-                mot_de_passe: "Mot de passe",
-                confirm: "Confirmer",
-              }[field];
+              const type = getInputType(field);
+              const isPasswordField = field === "mot_de_passe" || field === "confirm";
+
               return (
-                <div key={field} className="flex flex-col gap-1">
-                  <label htmlFor={field} className="text-sm font-medium">{label}</label>
+                <div
+                  key={field}
+                  className="flex flex-col gap-1 w-full sm:w-[48%] max-w-[600px]"
+                >
+                  <label htmlFor={field} className="text-sm font-medium">
+                    {labels[field]}
+                  </label>
+
                   <div className="relative">
                     <input
                       id={field}
                       {...register(field)}
                       type={type}
-                      placeholder={label}
+                      placeholder={labels[field]}
                       disabled={pending}
-                      className={`w-[400px] sm:w-[550px] p-2 pr-10 border rounded outline-[#18769C] ${
+                      className={`w-full p-2 pr-10 border rounded outline-[#18769C] ${
                         error ? "border-red-500" : "border-[#18769C]/50"
                       }`}
                     />
-                    {(isPwd || isConf) && (
+                    {isPasswordField && (
                       <button
                         type="button"
-                        onClick={() => (isPwd ? setShowPassword(p => !p) : setShowConfirm(p => !p))}
-                        className="absolute inset-y-0 right-2 flex items-center text-gray-500"
+                        onClick={() => toggleVisibility(field)}
+                        className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500"
                         tabIndex={-1}
                       >
-                        {(isPwd && showPassword) || (isConf && showConfirm) ? <FaEyeSlash /> : <FaEye />}
+                        {(field === "mot_de_passe" && showPassword) ||
+                        (field === "confirm" && showConfirm) ? (
+                          <FaEyeSlash />
+                        ) : (
+                          <FaEye />
+                        )}
                       </button>
                     )}
                   </div>
+
                   {error && <p className="text-red-500 text-sm">{error.message}</p>}
                 </div>
               );
             })}
-            <div className="flex flex-col items-center w-[1100px]">
+
+            <div className="flex flex-col items-center w-full mt-4">
               <button
                 type="submit"
                 disabled={isSubmitting || pending}
-                className="w-[400px] sm:w-[400px] p-2 rounded hover:bg-gradient-to-l hover:from-[#18769C] hover:to-#18769C]/20 mt-4 cursor-pointer bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white"
+                className="w-full sm:w-[400px] p-2 rounded bg-gradient-to-r from-[#18769C] 
+                to-[#18769C]/20 text-xl text-white hover:bg-gradient-to-l hover:from-[#18769C] 
+                hover:to-[#18769C]/20 cursor-pointer"
               >
                 {pending ? <span className="animate-pulse">Chargement...</span> : "S'inscrire"}
               </button>
-              <p>
-                Déjà inscrit ?
-                <Link to="/sign-in" className="text-[#50a9f2] underline ml-1">Se connecter</Link>
+              <p className="mt-2">
+                Déjà inscrit ?{" "}
+                <Link to="/sign-in" className="text-[#50a9f2] underline ml-1">
+                  Se connecter
+                </Link>
               </p>
             </div>
           </form>

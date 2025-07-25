@@ -22,15 +22,19 @@ import Facture from "~/pages/client/Facture";
 import Paiement from "~/pages/client/Paiement";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import { ProtectedRoute } from "./ProtectedRoute";
 
 const router = createBrowserRouter([
-   {
+  {
     path: "/admin",
-    element: <ProtectedLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <ProtectedLayout />
+      </ProtectedRoute>
+    ),
     children: [
       { index: true, element: <AdminDashboard /> },
-       { path: "admin-catalogues", element: <AdminCatalogues /> },
+      { path: "admin-catalogues", element: <AdminCatalogues /> },
       { path: "admin-category", element: <AdminCategory /> },
       { path: "admin-reservations", element: <AdminReservations /> },
       { path: "admin-reservations-detail/:id", element: <AdminReservationDetail /> },
@@ -46,10 +50,10 @@ const router = createBrowserRouter([
       { path: "materiel/:id", element: <MaterialDetail /> },
       { path: "pack-materiels", element: <PackMateriels /> },
       { path: "pack-detail/:id", element: <PackDetail /> },
-      { path: "client", element: <EspaceClient />},
-      { path: "devis/:id", element: <Devis />},
-      { path: "facture/:id", element: <Facture />},
-      { path: "paiement/:id", element: <Paiement />},
+      { path: "client", element: <EspaceClient /> },
+      { path: "devis/:id", element: <Devis /> },
+      { path: "facture/:id", element: <Facture /> },
+      { path: "paiement/:id", element: <Paiement /> },
       { path: "basket", element: <Basket /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <SignUp /> },
@@ -57,5 +61,4 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 export default router;

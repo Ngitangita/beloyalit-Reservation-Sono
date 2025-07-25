@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { MdClose } from "react-icons/md";
 
 export const priceRanges = [
   { label: "< 5 000 Ar", min: 0, max: 50 },
@@ -15,11 +16,12 @@ type Props = {
   selectedPrices: typeof priceRanges;
   onPricesChange: (prs: typeof priceRanges) => void;
   resetAll: () => void;
+  setFilterOpen: () => void;
 };
 
-const SCROLL_DISTANCE = 350; 
-const START_BOTTOM = -250;
-const END_BOTTOM = 30;
+const SCROLL_DISTANCE = 0;
+const START_BOTTOM = 0;
+const END_BOTTOM = 0;
 
 export default function FiltersPacks({
   packNames,
@@ -28,6 +30,7 @@ export default function FiltersPacks({
   selectedPrices,
   onPricesChange,
   resetAll,
+  setFilterOpen,
 }: Props) {
   const [showAllPacks, setShowAllPacks] = useState(false);
   const [showAllPrices, setShowAllPrices] = useState(false);
@@ -40,7 +43,8 @@ export default function FiltersPacks({
       const scrollY = window.scrollY;
 
       const progress = Math.min(scrollY / SCROLL_DISTANCE, 1);
-      const interpolated = START_BOTTOM + (END_BOTTOM - START_BOTTOM) * progress;
+      const interpolated =
+        START_BOTTOM + (END_BOTTOM - START_BOTTOM) * progress;
 
       setBottom(interpolated);
       requestRef.current = requestAnimationFrame(updatePosition);
@@ -62,15 +66,24 @@ export default function FiltersPacks({
   return (
     <aside
       className={`
-        w-64 p-4 bg-white text-[#575756] rounded-lg fixed z-50
+        w-64 p-4 pt-10 bg-white text-[#575756] rounded-lg fixed z-50
         transition-none pointer-events-auto
+        pb-16 max-h-[calc(100vh-2rem)] overflow-y-auto
       `}
       style={{ bottom: `${bottom}px` }}
     >
-      <h2 className="font-bold text-lg mb-4">Filtres</h2>
+      <div className="flex justify-between items-center p-4 border-b">
+        <h2 className="font-bold text-lg mb-4">Filtres</h2>
+        <button
+          onClick={() => setFilterOpen(false)}
+          className="cursor-pointer bg-"
+        >
+          <MdClose size={24} />
+        </button>
+      </div>
       <button
         onClick={resetAll}
-        className="w-full py-2 mb-4 bg-gray-100 rounded hover:bg-gray-200"
+        className="w-full py-2 mb-4 mt-4 cursor-pointer bg-gray-100 rounded hover:bg-gray-200"
       >
         Effacer les filtres
       </button>

@@ -146,13 +146,15 @@ export default function Catalogue() {
     <div>
       <section className="bgImageCatalogue">
         <div
-          className="
-         bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
-      text-white  px-2 py-8 sm:px-4 sm:py-12 sm:pl-3
-      w-full flex flex-col items-center"
-        >
-          <h1  className="text-3xl font-extrabold mb-4 text-center
-           borde sm:w-[700px]">
+        className="
+          bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
+          text-white w-full flex flex-col px-4 py-8 pl-20 pt-20
+        "
+      >
+        <h1 className="
+          text-3xl max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl 
+          font-extrabold mb-4 flex gap-2
+        ">
             Découvrez le catalogue Blit Sono - chaque matériel compte pour la
             réussite de votre événement.
           </h1>
