@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import type { MaterielType } from "~/types/types";
-import { useRef, useState, useEffect, useCallback } from "react";
 import { FaThumbsUp, FaHandPointRight } from "react-icons/fa";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 type Props = {
   materiels: (MaterielType & { path: string })[];
@@ -12,52 +14,40 @@ export default function Packs({
   materiels,
   autoScrollIntervalMs = 5000,
 }: Props) {
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
-
-  const update = useCallback(() => {
-    const cont = carouselRef.current;
-    if (!cont) return;
-    setAtStart(cont.scrollLeft === 0);
-    setAtEnd(cont.scrollLeft + cont.clientWidth >= cont.scrollWidth - 1);
-  }, []);
-
-  useEffect(() => {
-    const c = carouselRef.current;
-    if (!c) return;
-    c.addEventListener("scroll", update);
-    update();
-    return () => c.removeEventListener("scroll", update);
-  }, [update]);
-
-  const scrollBy = useCallback((amt: number) => {
-    carouselRef.current?.scrollBy({ left: amt, behavior: "smooth" });
-  }, []);
-
-  const scroll = useCallback(
-    (dir: "prev" | "next") => {
-      const cont = carouselRef.current;
-      if (!cont) return;
-      scrollBy(
-        dir === "next" ? cont.clientWidth * 0.8 : -cont.clientWidth * 0.8
-      );
-    },
-    [scrollBy]
-  );
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      const cont = carouselRef.current;
-      if (!cont) return;
-      if (cont.scrollLeft + cont.clientWidth >= cont.scrollWidth - 1) {
-        scrollBy(-cont.scrollLeft);
-      } else {
-        scroll("next");
-      }
-    }, autoScrollIntervalMs);
-    return () => clearInterval(id);
-  }, [autoScrollIntervalMs, scroll, scrollBy]);
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: autoScrollIntervalMs,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+    nextArrow: (
+      <div className="text-4xl sm:text-5xl p-1 sm:p-2 text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded-full cursor-pointer z-10">
+        ›
+      </div>
+    ),
+    prevArrow: (
+      <div className="text-4xl sm:text-5xl p-1 sm:p-2 text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded-full cursor-pointer z-10">
+        ‹
+      </div>
+    ),
+  };
 
   return (
     <div className="px-8">
@@ -73,62 +63,36 @@ export default function Packs({
           l'emploi.
         </p>
         <p className="italic text-sm sm:text-base">
-          <FaHandPointRight size={20} className="inline mr-2 text-[#1E2939]" />{" "}
+          <FaHandPointRight size={20} className="inline mr-2 text-[#1E2939]" />
           Visitez les fiches de chaque pack pour découvrir les détails, les
           équipements inclus, et choisir celui qui correspond le mieux à votre
           projet.
         </p>
       </div>
-      <div className="relative flex items-center border-b border-gray-300 pt-5 pb-5">
-        <div
-          id="carousel"
-          ref={carouselRef}
-          className="overflow-x-auto whitespace-nowrap scroll-smooth pl-2 pr-2 sm:pl-6 sm:pr-6"
-        >
+
+      <div className="relative pt-5 pb-5">
+        <Slider {...settings}>
           {materiels.map((m) => (
-            <Link
-              key={m.id}
-              to={`/pack-detail/${m.id}`}
-              className="inline-block w-64 sm:w-56 md:w-64 lg:w-72 xl:w-80 mx-2"
-            >
-              <div className="rounded-lg p-4 shadow-md hover:scale-105 transition duration-300 ease-in-out bg-white hover:shadow-lg group">
-                <p className="text-sm text-gray-600 line-clamp-2 group-hover:text-[#18769C] truncate">
-                  {m.description}
-                </p>
-                <h3 className="mt-2 font-semibold text-lg text-gray-800 group-hover:text-[#18769C]">
-                  {m.nom}
-                </h3>
-                <p className="text-sm text-gray-700 mt-1 group-hover:text-[#18769C]">
-                  Prix : <strong>{m.prix_location}</strong>
-                </p>
-              </div>
-            </Link>
+            <div key={m.id} className="px-2">
+              <Link
+                to={`/pack-detail/${m.id}`}
+                className="block w-full h-full"
+              >
+                <div className="rounded-lg p-4 shadow-md hover:scale-105 transition duration-300 ease-in-out bg-white hover:shadow-lg group">
+                  <p className="text-sm text-gray-600 line-clamp-2 group-hover:text-[#18769C] truncate">
+                    {m.description}
+                  </p>
+                  <h3 className="mt-2 font-semibold text-lg text-gray-800 group-hover:text-[#18769C]">
+                    {m.nom}
+                  </h3>
+                  <p className="text-sm text-gray-700 mt-1 group-hover:text-[#18769C]">
+                    Prix : <strong>{m.prix_location}</strong>
+                  </p>
+                </div>
+              </Link>
+            </div>
           ))}
-        </div>
-
-        <button
-          onClick={() => scroll("prev")}
-          disabled={atStart}
-          className={`
-        absolute left-0 top-1/2 transform -translate-y-1/2 text-4xl sm:text-5xl p-1 sm:p-2 btn btn-circle text-[#18769C]/50 bg-[#F3F4F6]
-        hover:bg-[#1E2939] hover:text-[#18769C]
-        ${atStart ? "opacity-50 cursor-not-allowed" : ""}
-      `}
-        >
-          ‹
-        </button>
-
-        <button
-          onClick={() => scroll("next")}
-          disabled={atEnd}
-          className={`
-        absolute right-0 top-1/2 transform -translate-y-1/2 text-4xl sm:text-5xl p-1 sm:p-2 btn btn-circle text-[#18769C]/50 bg-[#F3F4F6]
-        hover:bg-[#1E2939] hover:text-[#18769C]
-        ${atEnd ? "opacity-50 cursor-not-allowed" : ""}
-      `}
-        >
-          ›
-        </button>
+        </Slider>
       </div>
     </div>
   );
