@@ -8,6 +8,7 @@ import { useApiAuth } from "~/hooks/useApiAuth";
 import { execute } from "~/utils/execute";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { Loading } from "~/components/Loading";
+import { toast } from "react-toastify";
 
 const schema = yup
   .object({
@@ -48,12 +49,14 @@ export const SignIn = () => {
           } else {
             navigate("/", { replace: true });
           }
+          toast.success("Connexion réussie !");
         },
         onError: (err) => {
           setIsAuthenticated(false);
           setToken(null);
           setUser(null);
           console.error("Erreur de connexion", err);
+          toast.error("Identifiants incorrects.");
         },
       });
     });
