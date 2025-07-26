@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "~/stores/useCartStore";
 import { useAuthStore } from "~/stores/useAuthStore";
+import { toast } from "react-toastify";
 
 type CartItem = {
   id: number;
@@ -20,6 +21,8 @@ export default function Basket() {
   const clearCart = useCartStore((s) => s.clear);
   const currentUser = useAuthStore((s) => s.user);
   const isAuthenticated = !!currentUser;
+
+  const navigate = useNavigate();
 
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
@@ -44,14 +47,19 @@ export default function Basket() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      toast.info("Votre panier est vide.");
+      return;
+    }
     if (!isAuthenticated) {
-      alert("Veuillez vous connecter ou créer un compte avant d'envoyer la demande.");
+      toast.warning("Veuillez vous connecter ou créer un compte avant d'envoyer la demande.");
+      navigate("/sign-in");
       return;
     }
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      toast.error("Veuillez corriger les erreurs dans le formulaire.");
       return;
     }
     setErrors({});
@@ -84,11 +92,11 @@ export default function Basket() {
       });
       if (!res.ok) throw new Error("Échec de la réservation");
       const data = await res.json();
-      alert("Réservation enregistrée !");
+      toast.success("Réservation enregistrée !");
       clearCart();
-      // redirection possible : navigate(`/reservations/${data.id}`)
+      // navigate(`/reservations/${data.id}`); // à décommenter si tu veux rediriger vers la page de réservation
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message || "Erreur lors de la réservation");
     } finally {
       setIsSubmitting(false);
     }
