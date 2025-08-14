@@ -440,7 +440,7 @@ export default function PackDetail() {
           ← Retour aux packs</Link>
           <button
             onClick={handleAdd}
-            className={`px-6 py-3 rounded text-white transition duration-200 ${
+            className={`px-6 py-3 rounded text-white transition duration-200 cursor-pointer ${
               added ? "bg-green-500 hover:bg-green-600" : "bg-[#18769C] hover:bg-[#0f5a70]"
             }`}
           >

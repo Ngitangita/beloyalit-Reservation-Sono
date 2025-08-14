@@ -20,6 +20,7 @@ export default function Header(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const user = useAuthStore((state) => state.user);
 
   const logout = () => {
     useAuthStore.getState().logout();
@@ -76,6 +77,11 @@ export default function Header(): JSX.Element {
               )
             )}
           </nav>
+          {user?.role === "admin" && (
+            <li className="bg-white text-[#18769C] inline-block p-1 rounded">
+              <Link to="/admin">Admin</Link>
+            </li>
+          )}
           <div className="w-40 sm:w-56 lg:w-72">
             <Search />
           </div>

@@ -15,6 +15,8 @@ import MaterialDetail from "~/pages/client/MaterialDetail";
 import PackDetail from "~/pages/client/PacksDetail";
 import PublicNotFound from "~/pages/not-found/PublicNotFound";
 import ProtectedNotFound from "~/pages/not-found/ProtectedNotFound";
+import ForbiddenPage from "~/pages/not-found/ForbiddenPage";
+import ProtectedClient from "~/pages/not-found/ProtectedClient";
 import PackMateriels from "~/pages/client/PackMateriels";
 import EspaceClient from "~/pages/client/Espace-client";
 import Devis from "~/pages/client/Devis";
@@ -26,9 +28,7 @@ import "slick-carousel/slick/slick-theme.css";
 const router = createBrowserRouter([
   {
     path: "/admin",
-    element: (
-        <ProtectedLayout />
-    ),
+    element: <ProtectedLayout />,
     children: [
       { index: true, element: <AdminDashboard /> },
       { path: "admin-catalogues", element: <AdminCatalogues /> },
@@ -47,13 +47,21 @@ const router = createBrowserRouter([
       { path: "materiel/:id", element: <MaterialDetail /> },
       { path: "pack-materiels", element: <PackMateriels /> },
       { path: "pack-detail/:id", element: <PackDetail /> },
-      { path: "client", element: <EspaceClient /> },
-      { path: "devis/:id", element: <Devis /> },
-      { path: "facture/:id", element: <Facture /> },
-      { path: "paiement/:id", element: <Paiement /> },
+
+      {
+        element: <ProtectedClient />,
+        children: [
+          { path: "client", element: <EspaceClient /> },
+          { path: "devis/:id", element: <Devis /> },
+          { path: "facture/:id", element: <Facture /> },
+          { path: "paiement/:id", element: <Paiement /> },
+        ]
+      },
+
       { path: "basket", element: <Basket /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <SignUp /> },
+       { path: "forbidden", element: <ForbiddenPage /> },
       { path: "*", element: <PublicNotFound /> },
     ],
   },

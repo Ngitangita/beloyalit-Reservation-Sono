@@ -4,12 +4,12 @@ import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { useApiAuth } from "~/hooks/useApiAuth";
 import type { FormValues } from "~/types/user";
 import { execute } from "~/utils/execute";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { Loading } from "~/components/Loading";
-
 
 const schema = yup.object({
   prenom: yup.string().required("Le prénom est obligatoire"),
@@ -29,6 +29,7 @@ export const SignUp = () => {
   const [pending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const setIsAuthenticated = useAuthStore.use.setIsAuthenticated();
   const setToken = useAuthStore.use.setToken();
@@ -40,15 +41,7 @@ export const SignUp = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
 
-  const fields: (keyof FormValues)[] = [
-    "nom",
-    "prenom",
-    "telephone",
-    "email",
-    "mot_de_passe",
-    "confirm",
-  ];
-
+  const fields: (keyof FormValues)[] = ["nom", "prenom", "telephone", "email", "mot_de_passe", "confirm"];
   const labels: Record<keyof FormValues, string> = {
     nom: "Nom",
     prenom: "Prénom",
@@ -72,6 +65,10 @@ export const SignUp = () => {
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     startTransition(() => {
+      setLoading(true);
+
+      const maxLoadingTimer = setTimeout(() => setLoading(false), 5000);
+
       execute(
         () =>
           signup({
@@ -87,9 +84,17 @@ export const SignUp = () => {
             setToken(res.token);
             setUser(res.user);
             setIsAuthenticated(true);
+            toast.success("Inscription réussie !");
             navigate(res.user.role === "user" ? "/" : "/admin", { replace: true });
           },
-          onError: (err) => console.error("Erreur d'inscription :", err),
+          onError: (err) => {
+            console.error("Erreur d'inscription :", err);
+            toast.error("Échec de l'inscription. Vérifiez vos informations.");
+          },
+          onFinally: () => {
+            clearTimeout(maxLoadingTimer);
+            setLoading(false);
+          },
         }
       );
     });
@@ -97,10 +102,8 @@ export const SignUp = () => {
 
   return (
     <>
-      {pending && <Loading />}
-    <div className="flex flex-col sm:flex-col gap-4 items-center
-     justify-center bg-[#FFFFFF] p-4 pt-18 text-[#575756] w-full">
-
+      {(pending || loading) && <Loading />}
+      <div className="flex flex-col sm:flex-col gap-4 items-center justify-center bg-[#FFFFFF] p-4 pt-18 text-[#575756] w-full">
         <title>S'inscrire</title>
 
         <h1 className="text-center font-semibold font-open-sans text-[32px]">Je crée mon compte</h1>
@@ -108,24 +111,15 @@ export const SignUp = () => {
         <div className="overflow-hidden w-full max-w-screen-xl px-4 sm:px-10">
           <h2 className="font-semibold text-[20px] mb-4">Identification</h2>
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            className="flex flex-wrap gap-6 justify-between"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-wrap gap-6 justify-between">
             {fields.map((field) => {
               const error = errors[field];
               const type = getInputType(field);
               const isPasswordField = field === "mot_de_passe" || field === "confirm";
 
               return (
-                <div
-                  key={field}
-                  className="flex flex-col gap-1 w-full sm:w-[48%] max-w-[600px]"
-                >
-                  <label htmlFor={field} className="text-sm font-medium">
-                    {labels[field]}
-                  </label>
+                <div key={field} className="flex flex-col gap-1 w-full sm:w-[48%] max-w-[600px]">
+                  <label htmlFor={field} className="text-sm font-medium">{labels[field]}</label>
 
                   <div className="relative">
                     <input
@@ -133,24 +127,17 @@ export const SignUp = () => {
                       {...register(field)}
                       type={type}
                       placeholder={labels[field]}
-                      disabled={pending}
-                      className={`w-full p-2 pr-10 border rounded outline-[#18769C] ${
-                        error ? "border-red-500" : "border-[#18769C]/50"
-                      }`}
+                      disabled={pending || loading}
+                      className={`w-full p-2 pr-10 border rounded outline-[#18769C] ${error ? "border-red-500" : "border-[#18769C]/50"}`}
                     />
                     {isPasswordField && (
                       <button
                         type="button"
                         onClick={() => toggleVisibility(field)}
-                        className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500"
+                        className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500 cursor-pointer"
                         tabIndex={-1}
                       >
-                        {(field === "mot_de_passe" && showPassword) ||
-                        (field === "confirm" && showConfirm) ? (
-                          <FaEyeSlash />
-                        ) : (
-                          <FaEye />
-                        )}
+                        {(field === "mot_de_passe" && showPassword) || (field === "confirm" && showConfirm) ? <FaEyeSlash /> : <FaEye />}
                       </button>
                     )}
                   </div>
@@ -163,18 +150,14 @@ export const SignUp = () => {
             <div className="flex flex-col items-center w-full mt-4">
               <button
                 type="submit"
-                disabled={isSubmitting || pending}
-                className="w-full sm:w-[400px] p-2 rounded bg-gradient-to-r from-[#18769C] 
-                to-[#18769C]/20 text-xl text-white hover:bg-gradient-to-l hover:from-[#18769C] 
-                hover:to-[#18769C]/20 cursor-pointer"
+                disabled={isSubmitting || pending || loading}
+                className="w-full sm:w-[400px] p-2 rounded bg-gradient-to-r from-[#18769C] to-[#18769C]/20 text-xl text-white hover:bg-gradient-to-l hover:from-[#18769C] hover:to-[#18769C]/20 cursor-pointer"
               >
-                {pending ? <span className="animate-pulse">Chargement...</span> : "S'inscrire"}
+                {pending || loading ? <span className="animate-pulse">Chargement...</span> : "S'inscrire"}
               </button>
               <p className="mt-2">
                 Déjà inscrit ?{" "}
-                <Link to="/sign-in" className="text-[#50a9f2] underline ml-1">
-                  Se connecter
-                </Link>
+                <Link to="/sign-in" className="text-[#50a9f2] underline ml-1">Se connecter</Link>
               </p>
             </div>
           </form>

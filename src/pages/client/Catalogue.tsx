@@ -6,12 +6,9 @@ import FiltersCategory, {
 import ScrollDownButton from "~/components/clientHome/ScrollDownButton";
 import { useCartStore } from "~/stores/useCartStore";
 import type { MaterielsType } from "~/types/types";
-import {
-  FaShoppingCart,
-  FaPhone,
-  FaThumbsUp,
-} from "react-icons/fa";
+import { FaShoppingCart, FaPhone, FaThumbsUp } from "react-icons/fa";
 import { MdFilterList, MdClose } from "react-icons/md";
+import { toast } from "react-toastify";
 
 type Materiel = MaterielsType & { prix: number };
 
@@ -124,37 +121,44 @@ export default function Catalogue() {
   }, [q, selectedCats, selectedPrices]);
 
   const toggleAdded = (id: number, item: Materiel) => {
-    addToCart({
-      id: item.id,
-      name: item.nom,
-      image_url: item.image_url,
-      price: item.prix,
-    });
-    setAddedIds((prev) => new Set(prev).add(id));
-    setTimeout(
-      () =>
+    try {
+      addToCart({
+        id: item.id,
+        name: item.nom,
+        image_url: item.image_url,
+        price: item.prix,
+      });
+      setAddedIds((prev) => new Set(prev).add(id));
+
+      setTimeout(() => {
         setAddedIds((prev) => {
           const c = new Set(prev);
           c.delete(id);
           return c;
-        }),
-      2000
-    );
+        });
+      }, 2000);
+
+      toast.success("Produit ajouté au panier !");
+    } catch (error) {
+      toast.error("Erreur lors de l'ajout au panier.");
+    }
   };
 
   return (
     <div>
       <section className="bgImageCatalogue">
         <div
-        className="
+          className="
           bg-gradient-to-r from-[#1E2939]/85 via-[#1E2939]/65 to-[#1E2939]
           text-white w-full flex flex-col px-4 py-8 pl-20 pt-20
         "
-      >
-        <h1 className="
+        >
+          <h1
+            className="
           text-3xl max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl 
           font-extrabold mb-4 flex gap-2
-        ">
+        "
+          >
             Découvrez le catalogue Blit Sono - chaque matériel compte pour la
             réussite de votre événement.
           </h1>
@@ -181,10 +185,14 @@ export default function Catalogue() {
           className="sm:hidden text-2xl mb-4 focus:outline-none cursor-pointer"
           onClick={() => setOpen((o) => !o)}
         >
-          {open ? <MdClose /> : <button className="flex cursor-pointer items-center gap-2 p-2 bg-[#18769C] hover:bg-[#0f5a70] rounded-md text-white focus:outline-none">
-      <MdFilterList className="w-6 h-6 cursor-pointer" />
-      Filtrer
-    </button>}
+          {open ? (
+            <MdClose />
+          ) : (
+            <button className="flex cursor-pointer items-center gap-2 p-2 bg-[#18769C] hover:bg-[#0f5a70] rounded-md text-white focus:outline-none">
+              <MdFilterList className="w-6 h-6 cursor-pointer" />
+              Filtrer
+            </button>
+          )}
         </button>
 
         <div

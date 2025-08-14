@@ -15,6 +15,7 @@ import {
 import { MdFilterList} from "react-icons/md";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { toast } from "react-toastify";
 
 type PackType = {
   id: number;
@@ -448,17 +449,25 @@ export default function PackMateriels() {
   }, [q, selectedCats, selectedPrices]);
 
   const handleAddPack = (packId: number) => {
-    allPackItems
-      .filter((i) => i.packId.id === packId)
-      .forEach((item) => {
-        addToCart({
-          id: item.productId.id,
-          name: item.productId.nom,
-          image_url: item.productId.image_url,
-          price: item.productId.prix,
-        });
+  try {
+    const packItems = allPackItems.filter((i) => i.packId.id === packId);
+
+    if (packItems.length === 0) {
+      toast.error("Aucun produit trouvé pour ce pack.");
+      return;
+    }
+
+    packItems.forEach((item) => {
+      addToCart({
+        id: item.productId.id,
+        name: item.productId.nom,
+        image_url: item.productId.image_url,
+        price: item.productId.prix,
       });
+    });
+
     setAddedIds((prev) => new Set(prev).add(packId));
+
     setTimeout(() => {
       setAddedIds((prev) => {
         const c = new Set(prev);
@@ -466,7 +475,13 @@ export default function PackMateriels() {
         return c;
       });
     }, 2000);
-  };
+
+    toast.success("Pack ajouté au panier !");
+  } catch (error) {
+    toast.error("Erreur lors de l'ajout du pack.");
+  }
+};
+
 
 const settings = {
   dots: true,
@@ -591,7 +606,7 @@ const settings = {
             <div>
               <button
                 onClick={() => setIsGrid(true)}
-                className={`px-3 py-1 rounded ${
+                className={`px-3 py-1 rounded cursor-pointer ${
                   isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
                 }`}
               >
@@ -599,7 +614,7 @@ const settings = {
               </button>
               <button
                 onClick={() => setIsGrid(false)}
-                className={`px-3 py-1 ml-2 rounded ${
+                className={`px-3 py-1 ml-2 rounded cursor-pointer ${
                   !isGrid ? "bg-[#18769C] text-white" : "bg-gray-200"
                 }`}
               >
@@ -651,7 +666,7 @@ const settings = {
                       </Link>
                       <button
                         onClick={() => handleAddPack(pack.id)}
-                        className={`px-3 py-1 rounded-r-full transition duration-300 hover:scale-105 ${
+                        className={`px-3 py-1 rounded-r-full cursor-pointer transition duration-300 hover:scale-105 ${
                           addedIds.has(pack.id)
                             ? "bg-green-500 hover:bg-green-600 text-white"
                             : "bg-[#18769C] hover:bg-[#0f5a70] text-white"
@@ -694,7 +709,7 @@ const settings = {
                       </Link>
                       <button
                         onClick={() => handleAddPack(pack.id)}
-                        className={`px-3 py-1 rounded-r-full ${
+                        className={`px-3 py-1 rounded-r-full cursor-pointer ${
                           addedIds.has(pack.id)
                             ? "bg-green-500 hover:bg-green-600 text-white"
                             : "bg-[#18769C] hover:bg-[#0f5a70] text-white"
@@ -711,7 +726,6 @@ const settings = {
         </div>
       </div>
 
-      {/* footer unchanged */}
       <div className="text-[#18769C] py-10 w-full flex flex-col pr-30 items-end">
         <h1 className="text-3xl font-extrabold mb-4 flex items-center gap-1 w-[700px]">
           <FaThumbsUp size={24} /> Merci d'avoir consulté nos packs !

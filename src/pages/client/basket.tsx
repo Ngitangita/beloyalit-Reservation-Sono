@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "~/stores/useCartStore";
 import { useAuthStore } from "~/stores/useAuthStore";
 import { toast } from "react-toastify";
+import axiosClient from "~/conf/axiosClient";
 
 type CartItem = {
   id: number;
@@ -21,7 +23,6 @@ export default function Basket() {
   const clearCart = useCartStore((s) => s.clear);
   const currentUser = useAuthStore((s) => s.user);
   const isAuthenticated = !!currentUser;
-
   const navigate = useNavigate();
 
   const [eventDate, setEventDate] = useState("");
@@ -31,7 +32,33 @@ export default function Basket() {
   const [dayNight, setDayNight] = useState<"jour" | "nuit">("jour");
   const [paymentType, setPaymentType] = useState<"complet" | "partiel">("complet");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [availabilityErrors, setAvailabilityErrors] = useState<Record<number, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("reservationForm");
+    if (savedData) {
+      const {
+        eventDate,
+        eventTime,
+        location,
+        duration,
+        dayNight,
+        paymentType
+      } = JSON.parse(savedData);
+      setEventDate(eventDate || "");
+      setEventTime(eventTime || "");
+      setLocation(location || "");
+      setDuration(duration || "");
+      setDayNight(dayNight || "jour");
+      setPaymentType(paymentType || "complet");
+    }
+  }, []);
+
+  useEffect(() => {
+    const formData = { eventDate, eventTime, location, duration, dayNight, paymentType };
+    localStorage.setItem("reservationForm", JSON.stringify(formData));
+  }, [eventDate, eventTime, location, duration, dayNight, paymentType]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -52,18 +79,21 @@ export default function Basket() {
       return;
     }
     if (!isAuthenticated) {
-      toast.warning("Veuillez vous connecter ou créer un compte avant d'envoyer la demande.");
+      toast.warning("Veuillez vous connecter avant de finaliser");
       navigate("/sign-in");
       return;
     }
+
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       toast.error("Veuillez corriger les erreurs dans le formulaire.");
       return;
     }
+
     setErrors({});
     setIsSubmitting(true);
+
     const payload = {
       user_id: currentUser!.id,
       date_evenement: eventDate,
@@ -84,19 +114,32 @@ export default function Basket() {
     };
 
     try {
-      const res = await fetch("/api/reservations", {
-        method: "POST",
+      const res = await axiosClient.post("/api/reservations", payload, {
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(payload),
+        withCredentials: true,
       });
-      if (!res.ok) throw new Error("Échec de la réservation");
-      const data = await res.json();
+
+      if (res.status === 409) {
+        const errsMap: Record<number, string> = {};
+        res.data.unavailable.forEach((u: any) => { errsMap[u.id] = u.message; });
+        setAvailabilityErrors(errsMap);
+        toast.error("Certains articles ne sont pas disponibles pour la période sélectionnée.");
+        return;
+      }
+
       toast.success("Réservation enregistrée !");
       clearCart();
-      // navigate(`/reservations/${data.id}`); // à décommenter si tu veux rediriger vers la page de réservation
+      setAvailabilityErrors({});
+      localStorage.removeItem("reservationForm"); 
     } catch (err: any) {
-      toast.error(err.message || "Erreur lors de la réservation");
+      if (err.response && err.response.status === 409) {
+        const errsMap: Record<number, string> = {};
+        err.response.data.unavailable.forEach((u: any) => { errsMap[u.id] = u.message; });
+        setAvailabilityErrors(errsMap);
+        toast.error("Conflit de réservation détecté.");
+      } else {
+        toast.error(err.message || "Erreur lors de la réservation");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -323,6 +366,9 @@ export default function Basket() {
                   >
                     <MdDelete size={20} />
                   </button>
+                  {availabilityErrors[item.id] && (
+                    <p className="text-red-600 text-sm mt-1">{availabilityErrors[item.id]}</p>
+                  )}
                 </div>
               ))}
 
@@ -344,3 +390,5 @@ export default function Basket() {
     </div>
   );
 }
+
+
