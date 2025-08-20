@@ -10,6 +10,28 @@ type Props = {
   autoScrollIntervalMs?: number;
 };
 
+function NextArrow({ onClick }: { onClick?: () => void }) {
+  return (
+      <div className="w-10 text-center p-2 pt-0 text-5xl text-[#18769C]/50 relative left-full bottom-20
+      bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded cursor-pointer z-10"
+      onClick={onClick}
+    >
+      ›
+    </div>
+  );
+}
+
+function PrevArrow({ onClick }: { onClick?: () => void }) {
+  return (
+     <div className="w-10 text-center p-2 pt-0 text-5xl text-[#18769C]/50 relative right-10 top-20
+      bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded cursor-pointer z-10"
+      onClick={onClick}
+    >
+      ‹
+    </div>
+  );
+}
+
 export default function Packs({
   materiels,
   autoScrollIntervalMs = 5000,
@@ -37,16 +59,8 @@ export default function Packs({
         },
       },
     ],
-    nextArrow: (
-      <div className="text-4xl sm:text-5xl p-1 sm:p-2 text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded-full cursor-pointer z-10">
-        ›
-      </div>
-    ),
-    prevArrow: (
-      <div className="text-4xl sm:text-5xl p-1 sm:p-2 text-[#18769C]/50 bg-[#F3F4F6] hover:bg-[#1E2939] hover:text-[#18769C] rounded-full cursor-pointer z-10">
-        ‹
-      </div>
-    ),
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   return (
@@ -70,7 +84,7 @@ export default function Packs({
         </p>
       </div>
 
-      <div className="relative pt-5 pb-5">
+      <div className="relative pt-5 pb-5 pr-10 pl-10">
         <Slider {...settings}>
           {materiels.map((m) => (
             <div key={m.id} className="px-2">

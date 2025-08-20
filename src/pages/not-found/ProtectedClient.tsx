@@ -9,9 +9,6 @@ export default function ProtectedClient() {
     return <Navigate to="/sign-in" replace />;
   }
 
-  if (user?.role === "admin") {
-    return <Navigate to="/forbidden" replace />;
-  }
 
   return <Outlet />;
 }
